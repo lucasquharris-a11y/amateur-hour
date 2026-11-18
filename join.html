@@ -219,7 +219,7 @@
             <button class="btn ghost" type="button" id="syncBtn">Sync contacts</button>
           </div>
         </div>
-        <div class="actions"><button class="btn ghost" type="button" id="changeBtn">Change my pick</button></div>
+        <div class="actions"><a class="btn" id="weekLink" href="app.html">Go to my week</a><button class="btn ghost" type="button" id="changeBtn">Change my pick</button></div>
       </div>
       <div class="card-left">
       <p class="aside">see you <span id="noteDay"></span> <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
@@ -408,6 +408,7 @@
     $('doneWhen').textContent = `${a.when.replace(',', ' at')}, ${a.where}. That's ${a.credits} of your 12 credits this month, and your $50 membership starts today.${state.buddy ? ` We've texted ${state.buddy.name} an invite.` : ''}`;
     $('cardName').textContent = state.buddy ? `${state.name} + ${state.buddy.name}` : state.name;
     $('noteDay').textContent = day;
+    $('weekLink').href = `app.html?picked=${a.id}&name=${encodeURIComponent(state.name)}`;
     $('cardSlots').innerHTML = Array.from({ length: 12 }, (_, k) => k === 0
       ? `<div class="slot next"><div class="hole">1</div><div class="what">${a.short.replace(/^./, c => c.toUpperCase())}</div><div class="note hand">${day}</div></div>`
       : `<div class="slot"><div class="hole">${k + 1}</div>${k === 11 ? '<div class="note hand">free week!</div>' : ''}</div>`).join('');

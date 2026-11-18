@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your week · Amateur Hour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css">
+<script src="fonts.js"></script>
+<style>
+  /* The member's page. One long page, three places: this week, your card, your account. */
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 26px 6.5vw 0; }
+  .top nav { display: flex; gap: 28px; font-family: var(--ui); font-weight: 600; font-size: 17px; }
+  .top nav a { text-decoration: none; }
+  .top nav a:hover { text-decoration: underline; }
+  main { padding: 0 6.5vw 110px; }
+  section { padding-top: 96px; scroll-margin-top: 10px; }
+  section:first-of-type { padding-top: 7vh; }
+  h1 { font-weight: 400; font-size: clamp(38px, 4.2vw, 60px); line-height: 1.05; letter-spacing: -.02em; }
+  h2 { font-weight: 400; font-size: clamp(32px, 3.3vw, 48px); line-height: 1.06; letter-spacing: -.018em; }
+  .lede { margin-top: 16px; max-width: 30em; }
+  .fine { font-family: var(--ui); font-weight: 500; font-size: 16px; }
+  .actions { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .hand { font-family: var(--hand); }
+  [hidden] { display: none !important; }
+
+  /* ---------- this week ---------- */
+  .week-pick .aside { margin: 34px 0 0 24px; }
+  .week-pick .fan { --tw: clamp(280px, 30vw, 410px); margin-top: 8px; height: calc(var(--tw) * 1.02); }
+  .week-pick .fan .tkt.b { top: 52%; }
+  .week-pick .under { margin-top: 26px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+  .going { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 5vw; align-items: center; }
+  .going .remind { margin-top: 18px; }
+  .going .side { justify-self: center; display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+  .going .side .aside { margin-left: 26px; }
+  .tkt.solo { position: relative; --tw: clamp(280px, 30vw, 400px); rotate: -3deg; cursor: default; left: auto; right: auto; top: auto; }
+  .tkt.solo:hover { translate: none; }
+
+  /* ---------- bring a friend ---------- */
+  .friend { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: end; }
+  .friend form { display: flex; gap: 10px; }
+  .friend input { flex: 1; min-width: 0; font-family: var(--ui); font-weight: 500; font-size: 18px; padding: 15px 22px; border-radius: 999px; border: 2px solid var(--spruce); background: transparent; color: var(--ink); }
+  .friend input::placeholder { color: var(--ink); opacity: .5; }
+  .friend .sent { font-family: var(--ui); font-weight: 600; font-size: 18px; }
+
+  /* ---------- your card and journal ---------- */
+  .record { margin-top: 44px; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 5vw; align-items: start; }
+  .record .punch { rotate: -1.6deg; }
+  .record .tally { margin-top: 30px; }
+  .entry { padding: 22px 0 24px; border-top: 1.5px solid rgba(29, 74, 53, .28); }
+  .entry:last-child { border-bottom: 1.5px solid rgba(29, 74, 53, .28); }
+  .entry .when { font-family: var(--ui); font-weight: 600; font-size: 14px; }
+  .entry h3 { font-family: var(--ui); font-weight: 800; font-size: 23px; line-height: 1.1; margin-top: 3px; }
+  .entry h3 span { font-weight: 500; font-size: 16px; margin-left: 8px; }
+  .entry .said { font-family: var(--hand); font-size: calc(33px * var(--hk, 1)); line-height: 1.08; margin-top: 10px; max-width: 22em; }
+  .entry .verdict { font-family: var(--hand); font-size: calc(27px * var(--hk, 1)); line-height: 1; margin-top: 8px; display: inline-block; rotate: -2deg; border: 2px solid var(--ink); border-radius: 50% 46% 52% 48% / 55% 50% 50% 45%; padding: 3px 14px 5px; }
+  .entry .edit { background: none; border: 0; padding: 0; margin: 10px 0 0 14px; font-family: var(--ui); font-weight: 600; font-size: 15px; text-decoration: underline; cursor: pointer; }
+  .entry form { margin-top: 12px; }
+  .entry textarea { display: block; width: 100%; max-width: 30em; min-height: 76px; resize: vertical; font-family: var(--hand); font-size: calc(33px * var(--hk, 1)); line-height: 1.08; color: var(--ink); background: transparent; border: 0; border-bottom: 2.5px solid var(--spruce); border-radius: 0; padding: 0 0 6px; }
+  .entry textarea::placeholder { color: var(--ink); opacity: .4; }
+  .entry textarea:focus { outline: none; border-bottom-color: var(--ink); }
+  .entry .row { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .entry .row .btn { padding: 13px 20px; font-size: 16px; }
+
+  /* ---------- your account ---------- */
+  .rows { margin-top: 36px; max-width: 880px; border-bottom: 1.5px solid rgba(29, 74, 53, .28); font-family: var(--ui); }
+  .arow { display: grid; grid-template-columns: 190px 1fr auto; align-items: center; gap: 22px; min-height: 78px; padding: 14px 0; border-top: 1.5px solid rgba(29, 74, 53, .28); }
+  .arow b { font-weight: 800; font-size: 18px; }
+  .arow p { font-size: 18px; font-weight: 500; line-height: 1.3; }
+  .arow .btn { padding: 13px 20px; font-size: 16px; }
+  .out { margin-top: 30px; }
+
+  @media (max-width: 860px) {
+    .top { padding: 20px 20px 0; }
+    .top nav { gap: 16px; font-size: 15px; }
+    .top .wordmark { font-size: 23px; }
+    main { padding: 0 20px 72px; }
+    section { padding-top: 68px; }
+    .going, .friend, .record { grid-template-columns: 1fr; gap: 36px; }
+    .going .side { justify-self: start; }
+    .week-pick .fan { --tw: min(76vw, 330px); height: calc(var(--tw) * 1.18); }
+    .week-pick .fan .tkt.b { top: 57%; }
+    .tkt.solo { --tw: min(80vw, 340px); }
+    .friend form { flex-direction: column; }
+    .arow { grid-template-columns: 1fr auto; gap: 6px 14px; }
+    .arow b { grid-column: 1 / -1; }
+    .arow p { font-size: 16px; }
+  }
+  @media (max-width: 480px) { .top nav a.hide-s { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="wordmark" href="home.html">Amateur H<i class="chad"></i>ur</a>
+  <nav aria-label="Your pages">
+    <a href="#week">This week</a>
+    <a href="#card">Your card</a>
+    <a href="#account" class="hide-s">Account</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ THIS WEEK: the one thing to do ============ -->
+  <section id="week">
+
+    <div class="week-pick" id="statePick">
+      <h1>This week's two, <span data-name>Lucas</span>.</h1>
+      <p class="aside">take one</p>
+      <div class="fan" id="fan"></div>
+      <div class="under">
+        <p class="fine" id="creditsLeft"></p>
+        <button class="btn ghost" type="button" id="skipBtn">Skip this week</button>
+      </div>
+    </div>
+
+    <div class="going" id="stateGoing" hidden>
+      <div>
+        <h1 id="goingTitle"></h1>
+        <p class="lede" id="goingWhere"></p>
+        <div class="actions">
+          <button class="btn" type="button" id="calBtn">Add to calendar</button>
+          <button class="btn ghost" type="button" id="changeBtn">Change my pick</button>
+          <button class="btn ghost" type="button" id="cantBtn">Can't make it</button>
+        </div>
+        <p class="fine remind" id="remind">We'll text you a reminder two days before.</p>
+      </div>
+      <div class="side">
+        <p class="aside">see you <span id="goingDay"></span></p>
+        <div id="goingTicket"></div>
+      </div>
+    </div>
+
+    <div id="stateSkip" hidden>
+      <h1>You're skipping this week.</h1>
+      <p class="lede">Your credits roll over. Two new classes arrive on Sunday at 6pm.</p>
+      <div class="actions"><button class="btn ghost" type="button" id="unskipBtn">Actually, show me this week's</button></div>
+    </div>
+
+  </section>
+
+  <!-- ============ BRING A FRIEND ============ -->
+  <section class="friend" id="friend">
+    <div>
+      <h2>Bring a friend. It's $25 for them.</h2>
+      <p class="lede">We send them a link. They pay with Apple Pay and they're in, for whichever class you're going to this week.</p>
+    </div>
+    <div>
+      <form id="friendForm">
+        <input id="friendTo" type="text" autocomplete="off" placeholder="Their phone or email" aria-label="Your friend's phone or email">
+        <button class="btn">Send invite</button>
+      </form>
+      <p class="sent" id="friendSent" hidden></p>
+    </div>
+  </section>
+
+  <!-- ============ YOUR CARD AND JOURNAL ============ -->
+  <section id="card">
+    <h2>Your card, and what you made of it.</h2>
+    <div class="record">
+      <div>
+        <div class="punch" aria-label="Your punch card">
+          <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
+          <div class="punch-fields">
+            <div>Member <span class="line hand" data-name>Lucas</span></div>
+            <div>No. <span class="line hand">0413</span></div>
+          </div>
+          <div class="slots" id="slots"></div>
+        </div>
+        <p class="aside tally" id="tally"></p>
+      </div>
+      <div id="journal" aria-label="Your journal"></div>
+    </div>
+  </section>
+
+  <!-- ============ YOUR ACCOUNT ============ -->
+  <section id="account">
+    <h2>Your account.</h2>
+    <div class="rows">
+      <div class="arow"><b>Membership</b><p id="billText">$50 a month. Next payment December 18.</p><button class="btn ghost" type="button" id="billBtn">Manage billing</button></div>
+      <div class="arow"><b>Credits</b><p id="credText"></p><span></span></div>
+      <div class="arow"><b>Calendar</b><p id="acalText">Not connected. Connect it and classes go straight in.</p><button class="btn ghost" type="button" id="acalBtn">Connect calendar</button></div>
+      <div class="arow"><b>Contacts</b><p id="conText">Not synced. Sync and we'll tell you when someone you know is going.</p><button class="btn ghost" type="button" id="conBtn">Sync contacts</button></div>
+      <div class="arow"><b>Your buddy</b><p>Nobody yet. A buddy gets the same two classes as you each week.</p><a class="btn ghost" href="join.html?step=buddy&name=Lucas">Add a buddy</a></div>
+      <div class="arow"><b>When you're free</b><p>Weeknight evenings and Saturday mornings.</p><a class="btn ghost" href="join.html?step=when&name=Lucas">Change</a></div>
+      <div class="arow"><b>Hard nos</b><p>Heights.</p><a class="btn ghost" href="join.html?step=nos&name=Lucas">Change</a></div>
+      <div class="arow"><b>Taking a break</b><p id="pauseText">Pause any month. Your card and credits wait for you.</p><button class="btn ghost" type="button" id="pauseBtn">Pause membership</button></div>
+    </div>
+    <p class="out"><a class="btn ghost" href="home.html">Log out</a></p>
+  </section>
+
+</main>
+
+<script src="activities.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const byId = id => ACTIVITIES.find(a => a.id === id);
+  const cap = s => s.replace(/^./, c => c.toUpperCase());
+  const params = new URLSearchParams(location.search);
+
+  // A sample member, five weeks in. Everything here is made up for the prototype.
+  const member = {
+    name: params.get('name') || 'Lucas',
+    credits: 9,
+    week: 5,
+    thisWeek: ['glass', 'flycast'],
+    pick: null, skipped: false, calendar: false,
+    history: [
+      { id: 'standup', date: 'Wednesday, November 11', note: '', verdict: '' },
+      { id: 'ramen', date: 'Wednesday, November 4', note: 'Made it again at home on Sunday. The noodles were worse. The broth was better.', verdict: 'again' },
+      { id: 'trapeze', date: 'Tuesday, October 27', note: 'Made the catch on the third try. My stomach did not enjoy any of it.', verdict: 'never again' },
+      { id: 'crab', date: 'Saturday, October 24', note: 'Caught four, kept two. Cold hands, great morning.', verdict: 'again' }
+    ]
+  };
+  document.querySelectorAll('[data-name]').forEach(el => el.textContent = member.name);
+
+  /* ---------- this week ---------- */
+  const ticket = (a, side, tag = 'button') => `<${tag} class="tkt ${side}" ${tag === 'button' ? 'type="button"' : ''} data-id="${a.id}"><span class="main"><span class="lbl">Admit one</span><span class="name">${a.name}</span><span class="facts">${a.when}<br>${a.where}<br>${a.credits} credits</span></span><span class="stub"><span class="lbl">Week</span><b>${member.week}</b></span></${tag}>`;
+
+  function showWeek() {
+    $('statePick').hidden = !!member.pick || member.skipped;
+    $('stateGoing').hidden = !member.pick;
+    $('stateSkip').hidden = !member.skipped;
+    const left = member.credits - (member.pick ? member.pick.credits : 0);
+    $('creditsLeft').textContent = `${member.credits} credits left this month.`;
+    $('credText').textContent = `${left} of 12 left this month. Unused credits roll over.`;
+    if (!member.pick && !member.skipped) {
+      const fan = $('fan');
+      fan.className = 'fan';
+      fan.innerHTML = member.thisWeek.map((id, k) => ticket(byId(id), k ? 'b' : 'a')).join('');
+      fan.querySelectorAll('.tkt').forEach(t => t.addEventListener('click', () => {
+        if (fan.classList.contains('pick-a') || fan.classList.contains('pick-b')) return;
+        fan.classList.add(t.classList.contains('a') ? 'pick-a' : 'pick-b');
+        setTimeout(() => { member.pick = byId(t.dataset.id); showWeek(); }, 650);
+      }));
+    }
+    if (member.pick) {
+      const a = member.pick, day = a.when.split(',')[0];
+      $('goingTitle').textContent = `You're going ${a.short} on ${day}.`;
+      $('goingWhere').textContent = `${a.when.replace(',', ' at')}, ${a.where}. ${a.length ? cap(a.length) + ', ' : ''}${a.spots} people. We'll text you the address and what to wear.`;
+      $('goingDay').textContent = day;
+      $('goingTicket').innerHTML = ticket(a, 'a solo', 'div');
+      $('calBtn').hidden = member.calendar;
+      $('remind').textContent = member.calendar ? `It's in your calendar. We'll text you a reminder two days before.` : `We'll text you a reminder two days before.`;
+    }
+    drawCard();
+  }
+  $('skipBtn').addEventListener('click', () => { member.skipped = true; showWeek(); });
+  $('unskipBtn').addEventListener('click', () => { member.skipped = false; showWeek(); });
+  $('changeBtn').addEventListener('click', () => { member.pick = null; member.calendar = false; showWeek(); });
+  $('calBtn').addEventListener('click', () => { member.calendar = true; showWeek(); if (!$('acalBtn').hidden) $('acalBtn').click(); });
+  $('cantBtn').addEventListener('click', () => {
+    member.pick = null; member.calendar = false; member.skipped = true; showWeek();
+    $('stateSkip').querySelector('h1').textContent = "No problem. You're out of this one.";
+    $('stateSkip').querySelector('.lede').textContent = 'Your credits are back. Two new classes arrive on Sunday at 6pm.';
+  });
+
+  /* ---------- bring a friend ---------- */
+  $('friendForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const to = $('friendTo').value.trim();
+    const ok = /.+@.+\..+/.test(to) || to.replace(/\D/g, '').length === 10;
+    if (!ok) { $('friendTo').focus(); return; }
+    $('friendForm').hidden = true;
+    $('friendSent').hidden = false;
+    $('friendSent').textContent = `Invite sent to ${to}. They're in as soon as they pay.`;
+  });
+
+  /* ---------- the card ---------- */
+  function drawCard() {
+    const done = [...member.history].reverse();
+    $('slots').innerHTML = Array.from({ length: 12 }, (_, k) => {
+      const h = done[k];
+      if (h) return `<div class="slot punched"><div class="hole">${k + 1}</div><div class="what">${cap(byId(h.id).short)}</div>${h.verdict ? `<div class="note hand">${h.verdict}</div>` : ''}</div>`;
+      if (k === done.length && member.pick) return `<div class="slot next"><div class="hole">${k + 1}</div><div class="what">${cap(member.pick.short)}</div><div class="note hand">${member.pick.when.split(',')[0]}</div></div>`;
+      return `<div class="slot"><div class="hole">${k + 1}</div>${k === 11 ? '<div class="note hand">free week!</div>' : ''}</div>`;
+    }).join('');
+    $('tally').textContent = `${done.length} punched. ${12 - done.length} to a free week`;
+  }
+
+  /* ---------- the journal ---------- */
+  function drawJournal() {
+    $('journal').innerHTML = member.history.map((h, k) => {
+      const a = byId(h.id);
+      const head = `<p class="when">${h.date}</p><h3>${cap(a.short)}<span>${a.provider}</span></h3>`;
+      if (h.editing || (!h.note && !h.verdict)) return `<div class="entry">${head}
+        <form data-k="${k}">
+          <textarea placeholder="How was it? Write yourself a line." aria-label="Your note about ${a.short}">${h.note}</textarea>
+          <div class="row"><button class="btn" type="submit" value="again">I'd do it again</button><button class="btn ghost" type="submit" value="never again">Never again</button></div>
+        </form></div>`;
+      return `<div class="entry">${head}${h.note ? `<p class="said">${h.note.replace(/</g, '&lt;')}</p>` : ''}
+        ${h.verdict ? `<span class="verdict">${h.verdict}</span>` : ''}<button class="edit" type="button" data-edit="${k}">Edit</button></div>`;
+    }).join('');
+    $('journal').querySelectorAll('form').forEach(f => f.addEventListener('submit', e => {
+      e.preventDefault();
+      const h = member.history[+f.dataset.k];
+      h.note = f.querySelector('textarea').value.trim();
+      h.verdict = e.submitter ? e.submitter.value : h.verdict;
+      h.editing = false;
+      drawJournal(); drawCard();
+    }));
+    $('journal').querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => { member.history[+b.dataset.edit].editing = true; drawJournal(); }));
+  }
+
+  /* ---------- account (all mock) ---------- */
+  $('billBtn').addEventListener('click', () => { $('billText').textContent = '$50 a month, paid with Apple Pay. Next payment December 18. (Receipts and card changes would open here.)'; $('billBtn').hidden = true; });
+  $('acalBtn').addEventListener('click', () => { $('acalText').textContent = 'Connected. Classes go straight in, and we only send ones you can make.'; $('acalBtn').hidden = true; });
+  $('conBtn').addEventListener('click', () => { $('conText').textContent = "Synced. We'll tell you when someone you know is going."; $('conBtn').hidden = true; });
+  let paused = false;
+  $('pauseBtn').addEventListener('click', () => {
+    paused = !paused;
+    $('pauseText').textContent = paused ? 'Paused from December 18. No charge until you come back.' : 'Pause any month. Your card and credits wait for you.';
+    $('pauseBtn').textContent = paused ? 'Unpause' : 'Pause membership';
+  });
+
+  if (params.get('picked')) member.pick = byId(params.get('picked')) || null;
+  showWeek(); drawJournal();
+</script>
+</body>
+</html>
