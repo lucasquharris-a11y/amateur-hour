@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css">
+<script src="fonts.js"></script>
+<script>/* handwritten hero headline, written on at load. home.html?hero=type shows the typeset version. */ if (new URLSearchParams(location.search).get('hero') !== 'type') document.documentElement.classList.add('hand-hero');</script>
+<style>
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
+  .wordmark .city { font-family: var(--display); font-style: italic; font-weight: 400; font-size: .62em; letter-spacing: 0; color: var(--ink); margin-left: 8px; }
+  .nav a.login { font-family: var(--ui); font-weight: 600; font-size: 17px; text-decoration: none; }
+  .nav a.login:hover { text-decoration: underline; }
+
+  /* ---------- hero: the letter, with this week's choice beside it ---------- */
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); column-gap: 3vw;
+    align-items: center;
+    padding: 5vh 6.5vw 9vh; min-height: calc(100vh - 76px);
+  }
+  .hero h1 { font-weight: 400; font-size: var(--h1, clamp(52px, 6.3vw, 100px)); line-height: 1.04; letter-spacing: -.022em; }
+  .hero h1 span { display: block; white-space: nowrap; }
+  .mark { position: relative; display: inline-block !important; }
+  .mark svg { position: absolute; left: -2%; bottom: -.2em; width: 104%; height: .3em; overflow: visible; }
+  .mark path { fill: none; stroke: var(--pen); stroke-width: 3.2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  /* the headline as handwriting, written across the page on load */
+  .hand-hero .hero h1 { font-family: var(--hand); color: var(--ink); font-size: calc(clamp(62px, 6.9vw, 112px) * var(--hk, 1)); line-height: var(--hlh, .84); letter-spacing: -.01em; word-spacing: var(--hws, -.12em); font-variation-settings: normal; font-weight: 400; }
+  .hand-hero .hero h1 span { width: max-content; padding: .06em .12em .14em 0; margin-bottom: -.2em; animation: write var(--d) var(--t) cubic-bezier(.4, .1, .6, .9) both; }
+  .hand-hero .hero h1 span:nth-child(1) { --d: .7s; --t: .35s; }
+  .hand-hero .hero h1 span:nth-child(2) { --d: 1.05s; --t: 1.15s; }
+  .hand-hero .hero h1 span:nth-child(3) { --d: .85s; --t: 2.3s; }
+  .hand-hero .letter { margin-top: 40px; }
+  .letter { margin-top: 34px; max-width: 29em; }
+  .letter p + p { margin-top: .85em; }
+  .letter .btn { margin-top: 30px; }
+
+  .preview { justify-self: center; width: 100%; max-width: 520px; }
+  .preview .note { display: flex; align-items: flex-end; gap: 6px; margin: 0 0 14px 22px; font-size: clamp(30px, 2.5vw, 36px); line-height: 1; rotate: -3deg; }
+  .preview .note svg { width: 46px; height: 50px; margin-bottom: -22px; overflow: visible; }
+  .preview .note path { fill: none; stroke: var(--pen); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .preview { --pw: clamp(190px, 17.6vw, 250px); }
+  .hero .pick-card { --w: var(--pw); }
+  .hero .pair { min-height: calc(var(--pw) * 1.36 + 14px); }
+  .hero .pair.show .pick-card { animation: rise .45s both; }
+  .hero .pair.show .pick-card.green { animation-delay: .12s; }
+  .hero .pair.show .or-badge { animation: pop .3s .4s both; }
+  .hero .pair.pick-a .green, .hero .pair.pick-b .gold { opacity: .28; }
+  .hero .pair.pick-a .gold, .hero .pair.pick-b .green { scale: 1.03; }
+  .hero .pick-card { transition: translate .2s ease-out, box-shadow .2s ease-out, opacity .35s, scale .35s cubic-bezier(.2, .9, .3, 1.3); }
+  .hero .pair.leave .pick-card { animation: out .38s ease-in forwards; }
+  .hero .pair.leave .or-badge { animation: gone .2s forwards; }
+  @keyframes out { to { opacity: 0; transform: translateY(-16px); } }
+  /* the note-style tick boxes under each card */
+  .boxes { display: flex; justify-content: center; gap: 18px; margin-top: 30px; }
+  .boxes span { width: var(--pw); display: flex; justify-content: center; }
+  .boxes svg { width: 46px; height: 42px; overflow: visible; }
+  .boxes path { fill: none; stroke: var(--pen); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .boxes .ck { stroke-width: 3.4; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .boxes .ticked .ck { stroke-dashoffset: 0; transition: stroke-dashoffset .38s ease-out; }
+
+  /* ---------- the range: a slow belt of what's on ---------- */
+  .range { padding: 10px 0 96px; overflow: hidden; }
+  .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; padding: 0 6.5vw; }
+  .sec-head .aside { margin: 0 3vw 6px 0; }
+  .range h2 { max-width: 13em; font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; }
+  .belt { display: flex; gap: 18px; width: max-content; padding: 44px 0 20px; animation: belt 90s linear infinite; }
+  .belt:hover { animation-play-state: paused; }
+  @keyframes belt { to { transform: translateX(calc(-50% - 9px)); } }
+  .tag {
+    flex: none; width: 228px; min-height: 168px; border-radius: 16px; padding: 17px 17px 15px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+    font-family: var(--ui); box-shadow: 5px 7px 0 rgba(24, 32, 27, .1);
+  }
+  .tag:nth-child(odd) { rotate: -1.3deg; } .tag:nth-child(even) { rotate: 1.1deg; translate: 0 8px; }
+  .tag h3 { font-variation-settings: "wdth" 75; font-weight: 800; font-size: 31px; line-height: .94; letter-spacing: -.01em; }
+  .tag p { font-size: 16px; font-weight: 500; line-height: 1.25; }
+  .tag.gold { background: var(--marigold); color: var(--accent-ink); }
+  .tag.green { background: var(--spruce); color: var(--paper); }
+  .tag.manila { background: var(--manila); color: var(--spruce); }
+  .tag.line { background: var(--paper); color: var(--spruce); box-shadow: inset 0 0 0 2px var(--spruce), 5px 7px 0 rgba(24, 32, 27, .1); }
+  @media (prefers-reduced-motion: reduce) { .range { overflow-x: auto; } .belt { animation: none; } }
+
+  /* ---------- how a week goes ---------- */
+  .week { background: var(--spruce); color: var(--paper); padding: 104px 6.5vw 112px; }
+  .week .sec-head { padding: 0; }
+  .week .aside { color: var(--paper); }
+  .week h2 { max-width: 14em; font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; }
+  .week-grid { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: center; }
+
+  .stage { position: relative; height: 450px; }
+  .scene { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; font-family: var(--ui); }
+  .scene.on { opacity: 1; visibility: visible; }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+  @keyframes pop { from { opacity: 0; transform: scale(.4); } }
+
+  /* scene 1: the text */
+  .thread { width: min(100%, 500px); display: flex; flex-direction: column; gap: 10px; }
+  .stamp { font-size: 17px; font-weight: 600; text-align: center; margin-bottom: 14px; }
+  .scene.on .stamp { animation: rise .4s .05s both; }
+  .bubble { max-width: 420px; padding: 19px 24px; border-radius: 22px 22px 22px 6px; background: var(--paper); color: var(--ink); font-size: 22px; line-height: 1.35; font-weight: 500; }
+  .bubble.me { align-self: flex-end; border-radius: 22px 22px 6px 22px; background: var(--marigold); color: var(--accent-ink); }
+  .scene.on .bubble { animation: rise .45s .25s both; }
+  .scene.on .bubble.b2 { animation-delay: 1.1s; }
+  .scene.on .bubble.me { animation-delay: 2.2s; }
+
+  /* scene 2: pick */
+  .scene .pair { gap: 14px; }
+  .scene .pick-card { --w: 228px; cursor: default; padding: 18px 17px; border-radius: 16px; box-shadow: 6px 8px 0 rgba(0, 0, 0, .2); }
+  .scene .pick-card .facts { font-size: 14px; }
+  .scene .pick-card.green { box-shadow: inset 0 0 0 2px rgba(242, 239, 230, .6), 6px 8px 0 rgba(0, 0, 0, .2); }
+  .scene.on .pick-card { animation: rise .45s .2s both; }
+  .scene.on .pick-card.green { animation: rise .45s .35s both; }
+  .scene.pick.on .pick-card.green { animation: rise .45s .35s both, dim .4s 1.7s forwards; }
+  .scene.pick.on .pick-card.gold { animation: rise .45s .2s both, choose .45s 1.7s cubic-bezier(.2, .9, .3, 1.3) forwards; }
+  .scene.on .or-badge { animation: pop .3s .7s both; }
+  .scene.pick.on .or-badge { animation: pop .3s .7s both, gone .3s 1.7s forwards; }
+  @keyframes dim { to { opacity: .28; } }
+  @keyframes gone { to { opacity: 0; } }
+  @keyframes choose { to { translate: 0 -10px; rotate: -1deg; scale: 1.05; } }
+  .scene .tick { position: absolute; right: -12px; top: -12px; width: 40px; height: 40px; border-radius: 50%; background: var(--paper); color: var(--spruce); display: grid; place-items: center; }
+  .scene .tick svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .scene.on .tick { animation: pop .3s 2.1s cubic-bezier(.2, .9, .3, 1.4) both; }
+  .scene .pick-card.gold { position: relative; }
+
+  /* scene 3: show up */
+  .slip { width: min(100%, 480px); background: var(--paper); color: var(--ink); border-radius: 16px; padding: 24px 26px 22px; box-shadow: 7px 9px 0 rgba(0, 0, 0, .2); rotate: -1.2deg; }
+  .slip h4 { font-variation-settings: "wdth" 75; font-weight: 800; font-size: 40px; line-height: .95; }
+  .slip p { font-size: 18.5px; font-weight: 500; margin-top: 6px; }
+  .slip .going { margin-top: 18px; padding-top: 16px; border-top: 2px dashed rgba(24, 32, 27, .3); }
+  .faces { display: flex; gap: 7px; margin-bottom: 10px; }
+  .faces i { width: 30px; height: 30px; border-radius: 50%; background: var(--spruce); }
+  .faces i.you { background: var(--marigold); }
+  .faces i.friend { background: var(--pen); }
+  .scene.on .slip { animation: rise .5s .2s both; }
+  .scene.on .faces i { animation: pop .3s both; }
+  .scene.on .faces i:nth-child(1) { animation-delay: .8s; } .scene.on .faces i:nth-child(2) { animation-delay: .95s; }
+  .scene.on .faces i:nth-child(3) { animation-delay: 1.1s; } .scene.on .faces i:nth-child(4) { animation-delay: 1.25s; }
+  .scene.on .faces i:nth-child(5) { animation-delay: 1.4s; } .scene.on .faces i:nth-child(6) { animation-delay: 1.55s; }
+
+  /* scene 4: punch */
+  .scene .punch { width: 500px; --hole: 54px; padding: 26px 30px 30px; rotate: 1.6deg; box-shadow: 7px 9px 0 rgba(0, 0, 0, .2); }
+  .scene .punch .slots { margin-top: 20px; }
+  .scene.on .punch { animation: rise .5s .2s both; }
+  .scene.on .slot.fresh .hole { animation: punchit .32s 1.2s cubic-bezier(.3, 1.6, .5, 1) both; }
+  @keyframes punchit {
+    from { background: transparent; border-color: var(--spruce); box-shadow: none; color: var(--spruce); scale: 1.35; }
+    to { background: var(--spruce); border-color: transparent; box-shadow: inset 0 3px 3px rgba(0, 0, 0, .35); color: transparent; scale: 1; }
+  }
+  .scene .slot.fresh .hole { background: var(--spruce); border-color: transparent; box-shadow: inset 0 3px 3px rgba(0, 0, 0, .35); color: transparent; }
+  .scene .slot.fresh .note { clip-path: inset(0 0 0 0); }
+  .scene.on .slot.fresh .note { animation: write .6s 1.65s ease-out both; }
+  @keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+  /* the four steps */
+  .steps { display: flex; flex-direction: column; }
+  .step { display: block; width: 100%; text-align: left; background: none; border: 0; cursor: pointer; padding: 20px 0 22px; position: relative; opacity: .42; transition: opacity .3s; }
+  .step:hover { opacity: .75; }
+  .step.on { opacity: 1; }
+  .step h3 { font-weight: 400; font-size: clamp(27px, 2.5vw, 36px); line-height: 1.1; letter-spacing: -.012em; }
+  .step p { margin-top: 5px; max-width: 26em; font-size: 19px; line-height: 1.42; }
+  .step .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(242, 239, 230, .22); }
+  .step .bar::after { content: ""; position: absolute; inset: 0; background: var(--marigold); transform: scaleX(0); transform-origin: left; }
+  .steps.playing .step.on .bar::after { animation: fill var(--hold) linear forwards; }
+  .steps:not(.playing) .step.on .bar::after { transform: scaleX(1); }
+  @keyframes fill { to { transform: scaleX(1); } }
+  .step:focus-visible { outline-color: var(--marigold); }
+
+  /* ---------- the card ---------- */
+  .card { padding: 120px 6.5vw 124px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: center; }
+  .card-left { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; }
+  .card .punch { rotate: -2deg; }
+  .card h2 { font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; max-width: 12em; }
+  .card p { margin-top: 22px; max-width: 28em; }
+  .card p + p { margin-top: .85em; }
+  .card .btn { margin-top: 30px; }
+  .price { background: var(--manila); padding: 104px 6.5vw 112px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: start; }
+  .price h2 { font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; max-width: 11em; }
+  .price .figure { font-family: var(--ui); font-variation-settings: "wdth" 75; font-weight: 800; font-size: clamp(64px, 7.4vw, 112px); line-height: .9; letter-spacing: -.02em; color: var(--spruce); }
+  .price p { max-width: 27em; }
+  .price .figure span { position: relative; display: inline-block; }
+  .price .figure .doodle { position: absolute; left: -1%; bottom: -.2em; width: 102%; height: .2em; overflow: visible; color: var(--ink); }
+  .price .figure .doodle path { stroke-width: 3; vector-effect: non-scaling-stroke; }
+  .price .aside { display: flex; margin: 30px 0 4px 6px; rotate: -2deg; }
+  .price .aside + p { margin-top: 22px; }
+  .price p + p { margin-top: .85em; }
+  .price .btn { margin-top: 30px; }
+  footer { padding: 40px 6.5vw 44px; font-style: italic; font-size: 18px; }
+
+  @media (max-width: 600px) {
+    .nav { padding: 20px 20px 0; }
+    .nav .wordmark { font-size: 25px; }
+    .wordmark .city { display: none; }
+    .nav a.login { white-space: nowrap; }
+    .hero { padding: 4vh 20px 56px; min-height: 0; }
+    .hand-hero .hero h1 { font-size: calc(15.5vw * var(--hk, 1)); }
+    .hero h1 { font-size: 12vw; }
+    .preview .note { margin-left: 8px; }
+    .sec-head { flex-direction: column; align-items: flex-start; gap: 18px; padding: 0 20px; }
+    .sec-head .aside { margin: 0 0 0 4px; }
+    .range { padding-bottom: 64px; }
+    .belt { padding-top: 34px; }
+    .week { padding: 72px 20px 76px; }
+    .week-grid { margin-top: 28px; gap: 20px; }
+    .stage { height: 330px; }
+    .scene .pick-card { --w: 39vw; padding: 15px 14px; }
+    .scene .punch { --hole: 44px; padding: 18px 18px 22px; }
+    .slip { padding: 20px 20px 18px; }
+    .slip h4 { font-size: 32px; }
+    .slip p { font-size: 16.5px; }
+    .bubble { font-size: 18px; }
+    .step { padding: 16px 0 18px; }
+    .step p { font-size: 17px; }
+    .card { padding: 72px 20px 76px; gap: 44px; }
+    .card-left { gap: 22px; }
+    .price { padding: 72px 20px 80px; gap: 36px; }
+    .price .figure { font-size: 15vw; white-space: nowrap; }
+    footer { padding: 32px 20px 36px; }
+  }
+  @media (max-width: 940px) {
+    .hero, .week-grid, .card, .price { grid-template-columns: 1fr; }
+    .hero h1 span { white-space: normal; }
+    .preview { margin-top: 56px; }
+    .preview { --pw: min(40vw, 230px); }
+    .hero { padding-left: 20px; padding-right: 20px; }
+    .stage { height: 400px; }
+    .scene .punch { width: 100%; }
+    .card .punch { margin-bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="wordmark" href="home.html">Amateur H<i class="chad"></i>ur <span class="city">San Francisco</span></a>
+  <a class="login" href="join.html">Log in</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <h1>
+        <span>Be bad at</span>
+        <span>something new</span>
+        <span>every week.</span>
+      </h1>
+      <div class="letter">
+        <p>Work asks less of your head every month, and most evenings go to a screen. A normal week doesn't hand you many chances to learn something from scratch anymore.</p>
+        <p>So every Sunday you get two small classes around San Francisco for things you've probably never done. You pick one and show up. It's $50 a month.</p>
+        <a class="btn" href="join.html">Join in San Francisco</a>
+      </div>
+    </div>
+
+    <div class="preview" id="preview">
+      <p class="note hand"><span id="weekNote">week 1. pick one</span>
+        <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg>
+      </p>
+      <div class="pair" id="heroPair"></div>
+      <div class="boxes" aria-hidden="true">
+        <span><svg viewBox="0 0 48 44"><path class="sq" d="M6 9 L36 7 L38 38 L7 40 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg></span>
+        <span><svg viewBox="0 0 48 44"><path class="sq" d="M7 8 L37 9 L36 39 L6 38 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="range">
+    <div class="sec-head">
+      <h2>Do something this week that AI can't do for you.</h2>
+      <p class="aside">no screens involved <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+    </div>
+    <div class="belt" id="belt"></div>
+  </section>
+
+  <section class="week" id="week">
+    <div class="sec-head">
+      <h2>How a week goes</h2>
+      <p class="aside">ten seconds of deciding <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+    </div>
+    <div class="week-grid">
+      <div class="stage" aria-hidden="true">
+        <div class="scene on">
+          <p class="stamp">Sunday, 6pm. Your two for the week.</p>
+          <div class="pair">
+            <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p></div></div>
+            <div class="pick-card green"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p></div></div>
+            <span class="or-badge">or</span>
+          </div>
+        </div>
+        <div class="scene pick">
+          <div class="pair">
+            <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p></div><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5 L10 17.5 L19 7"/></svg></span></div>
+            <div class="pick-card green"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p></div></div>
+            <span class="or-badge">or</span>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="slip">
+            <h4>Thursday, 6:30pm</h4>
+            <p>Public Glass, Bayview. Wear closed-toe shoes.</p>
+            <div class="going">
+              <div class="faces"><i class="you"></i><i></i><i></i><i class="friend"></i><i></i><i></i></div>
+              <p>You and five others. Maya from your contacts is one of them.</p>
+            </div>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="punch">
+            <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
+            <div class="slots">
+              <div class="slot fresh"><div class="hole">1</div><div class="what">Glassblowing</div><div class="note hand">loved it</div></div>
+              <div class="slot"><div class="hole">2</div></div>
+              <div class="slot"><div class="hole">3</div></div>
+              <div class="slot"><div class="hole">4</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps" id="steps" style="--hold: 5200ms">
+        <button class="step on" type="button"><h3>Sunday, two new classes appear</h3><p>We choose them from what you've told us you haven't tried.</p><span class="bar"></span></button>
+        <button class="step" type="button"><h3>You pick one</h3><p>Tap the one you want. There's no catalogue to scroll and there are no reviews to read.</p><span class="bar"></span></button>
+        <button class="step" type="button"><h3>You show up</h3><p>Six to twelve people, and everything you need is there. Bring a friend on a day pass.</p><span class="bar"></span></button>
+        <button class="step" type="button"><h3>You punch your card</h3><p>Loved it or never again, the week counts either way.</p><span class="bar"></span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-left">
+    <div class="punch" aria-label="A member's punch card after four weeks">
+      <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
+      <div class="punch-fields">
+        <div>Member <span class="line hand">you?</span></div>
+        <div>No. <span class="line hand">0412</span></div>
+      </div>
+      <div class="slots">
+        <div class="slot punched"><div class="hole">1</div><div class="what">Rock crabbing</div><div class="note hand">loved it</div></div>
+        <div class="slot punched"><div class="hole">2</div><div class="what">Trapeze</div><div class="note hand">never again</div></div>
+        <div class="slot punched"><div class="hole">3</div><div class="what">Ramen</div></div>
+        <div class="slot punched"><div class="hole">4</div><div class="what">Stand-up</div></div>
+        <div class="slot next"><div class="hole">5</div><div class="what">Glassblowing</div></div>
+        <div class="slot"><div class="hole">6</div></div>
+        <div class="slot"><div class="hole">7</div></div>
+        <div class="slot"><div class="hole">8</div></div>
+        <div class="slot"><div class="hole">9</div></div>
+        <div class="slot"><div class="hole">10</div></div>
+        <div class="slot"><div class="hole">11</div></div>
+        <div class="slot"><div class="hole">12</div><div class="note hand">free week!</div></div>
+      </div>
+    </div>
+    <p class="aside up">yours starts empty <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+    </div>
+    <div>
+      <h2>Counteract your brainrot.</h2>
+      <p>One evening a week, go be a beginner at something with your hands, in a room with other people. You won't like everything we send you to. Some weeks turn into a hobby and some turn into a story you tell at dinner.</p>
+      <p>Twelve punches fill a card. A full card gets you a free week, and then you start another.</p>
+    </div>
+  </section>
+
+  <section class="price">
+    <h2>Trying new things in San Francisco shouldn't break the bank.</h2>
+    <div>
+      <p class="figure"><span>$50 a month<svg class="doodle" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4 9 C 90 3, 210 15, 396 7"/><path d="M30 19 C 130 13, 250 22, 372 16"/></svg></span></p>
+      <p class="aside">less than one dinner out</p>
+      <p>That's 12 credits. Most classes are 2 to 4, so it covers about one a week. The same glassblowing class is around $200 if you book it yourself.</p>
+      <p>Unused credits roll over, and you can pause any month.</p>
+      <a class="btn" href="join.html">Join in San Francisco</a>
+    </div>
+  </section>
+</main>
+
+<footer>Amateur Hour, San Francisco. Fills the long winter evenings.</footer>
+
+<script src="activities.js"></script>
+<script>
+  // The belt: every activity once, then repeated so the loop is seamless.
+  const tones = ['gold', 'line', 'green', 'manila'];
+  const tags = ACTIVITIES.map((a, k) => `<div class="tag ${tones[k % 4]}"><h3>${a.name}</h3><p>${a.area}</p></div>`).join('');
+  document.getElementById('belt').innerHTML = tags + tags;
+
+  // Hero: a new pair each "week". One gets ticked, then the next two arrive. Hover to hold; click a card to join with it.
+  const byId = id => ACTIVITIES.find(a => a.id === id);
+  const WEEKS = [['glass', 'crab'], ['trapeze', 'ramen'], ['letterpress', 'mushrooms'], ['bees', 'box'], ['forge', 'improv'], ['flycast', 'pot']];
+  const pairEl = document.getElementById('heroPair');
+  const boxEls = [...document.querySelectorAll('.boxes span')];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let week = 0, heroTimer = null;
+  const heroCard = (a, tone) => `<a class="pick-card ${tone}" href="join.html#${a.id}"><h3>${a.name}</h3><div class="facts"><p>${a.when}</p><p>${a.where}</p></div></a>`;
+  function heroShow() {
+    clearTimeout(heroTimer);
+    const [a, b] = WEEKS[week].map(byId);
+    pairEl.className = 'pair show';
+    pairEl.innerHTML = heroCard(a, 'gold') + heroCard(b, 'green') + '<span class="or-badge" aria-hidden="true">or</span>';
+    document.getElementById('weekNote').textContent = `week ${week + 1}. pick one`;
+    boxEls.forEach(b => b.classList.remove('ticked'));
+    if (still) return;
+    heroTimer = setTimeout(() => {
+      const side = week % 2;
+      boxEls[side].classList.add('ticked');
+      pairEl.classList.add(side ? 'pick-b' : 'pick-a');
+      heroTimer = setTimeout(() => {
+        pairEl.classList.add('leave');
+        heroTimer = setTimeout(() => { week = (week + 1) % WEEKS.length; heroShow(); }, 420);
+      }, 2400);
+    }, 3600);
+  }
+  heroShow();
+  const previewEl = document.getElementById('preview');
+  previewEl.addEventListener('mouseenter', () => { clearTimeout(heroTimer); pairEl.classList.remove('pick-a', 'pick-b', 'leave'); boxEls.forEach(b => b.classList.remove('ticked')); });
+  previewEl.addEventListener('mouseleave', () => { if (!still) heroShow(); });
+
+  // "How a week goes": one scene at a time, auto-advancing only while on screen. Click a step to jump.
+  const stepsEl = document.getElementById('steps');
+  const steps = [...stepsEl.querySelectorAll('.step')];
+  const scenes = [...document.querySelectorAll('.scene')];
+  const HOLD = 5200;
+  const reduced = still;
+  let i = 0, timer = null, visible = false;
+
+  function show(n) {
+    i = n;
+    steps.forEach((s, k) => s.classList.toggle('on', k === n));
+    scenes.forEach((s, k) => s.classList.toggle('on', k === n));
+    schedule();
+  }
+  function schedule() {
+    clearTimeout(timer);
+    const playing = visible && !reduced;
+    stepsEl.classList.toggle('playing', playing);
+    if (playing) timer = setTimeout(() => show((i + 1) % steps.length), HOLD);
+  }
+  steps.forEach((s, k) => s.addEventListener('click', () => show(k)));
+  new IntersectionObserver(entries => {
+    const now = entries[0].isIntersecting;
+    if (now === visible) return;
+    visible = now;
+    if (visible) show(0); else schedule();
+  }, { threshold: .45 }).observe(document.querySelector('.week-grid'));
+</script>
+</body>
+</html>

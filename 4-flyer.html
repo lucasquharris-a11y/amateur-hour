@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour · Direction 4, Pole flyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --goldenrod: #f2b01e;
+    --ink: #14110a;
+    --slip: #fbf8ee;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: "Courier Prime", "Courier New", monospace;
+    background: var(--goldenrod); color: var(--ink);
+    font-size: 19px; line-height: 1.45;
+  }
+  .poster { font-family: "Anton", Impact, sans-serif; font-weight: 400; text-transform: uppercase; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  /* photocopy grain */
+  .grain { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .16; mix-blend-mode: multiply; z-index: 5; }
+
+  .flyer { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+  .nav { display: flex; justify-content: space-between; padding: 24px 4vw 0; font-weight: 700; }
+  .nav a { text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+
+  .shout { padding: 1vh 4vw 3vh; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 3vh 4vw; align-items: end; }
+  .shout h1 { font-size: clamp(110px, 17.5vw, 300px); line-height: .86; letter-spacing: -.01em; white-space: nowrap; grid-column: 1 / -1; }
+  .shout h2 { font-size: clamp(34px, 4.3vw, 70px); line-height: 1; }
+  .shout p { max-width: 27em; padding-bottom: 6px; }
+
+  /* tear-off tabs: the signature */
+  .take { padding: 0 4vw; font-weight: 700; display: flex; justify-content: space-between; }
+  .tabs { display: flex; border-top: 2px dashed var(--ink); margin-top: 8px; }
+  .tab {
+    flex: 1 1 0; min-width: 0; height: 168px;
+    border: 0; border-left: 2px dashed var(--ink);
+    background: var(--goldenrod); color: var(--ink);
+    font: inherit; cursor: pointer;
+    writing-mode: vertical-rl;
+    display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    padding: 14px 0; text-align: left;
+    transform-origin: top center;
+    transition: transform .18s ease-out;
+  }
+  .tab:first-child { border-left: 0; }
+  .tab b { font-family: "Anton", Impact, sans-serif; font-weight: 400; text-transform: uppercase; font-size: clamp(17px, 1.55vw, 23px); letter-spacing: .01em; }
+  .tab span { font-size: 15px; }
+  .tab:hover { transform: translateY(7px) rotate(1.4deg); }
+  .tab.torn { animation: tear .7s cubic-bezier(.5, 0, .9, .4) forwards; pointer-events: none; }
+  @keyframes tear { to { transform: translateY(120vh) rotate(16deg); } }
+
+  /* slip that appears after a tab is taken */
+  .slip-wrap { position: fixed; inset: 0; display: none; place-items: center; background: rgba(20, 17, 10, .55); z-index: 10; padding: 20px; }
+  .slip-wrap.open { display: grid; }
+  .slip { background: var(--slip); width: min(100%, 470px); padding: 34px 34px 30px; transform: rotate(-1.2deg); }
+  .slip h3 { font-size: 40px; line-height: 1; }
+  .slip p { margin-top: 12px; }
+  .slip form { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .slip input { font: inherit; padding: 13px 14px; border: 2px solid var(--ink); background: transparent; color: var(--ink); border-radius: 0; }
+  .slip button { font: inherit; font-weight: 700; padding: 14px; border: 2px solid var(--ink); background: var(--ink); color: var(--goldenrod); cursor: pointer; border-radius: 0; }
+  .slip .back { background: transparent; color: var(--ink); border: 0; padding: 6px; text-decoration: underline; }
+  .slip .done { display: none; font-weight: 700; margin-top: 20px; }
+
+  .how { background: var(--ink); color: var(--goldenrod); padding: 100px 4vw 110px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 5vw; }
+  .how h2 { font-size: clamp(48px, 6.4vw, 104px); line-height: .92; }
+  .how p { max-width: 31em; }
+  .how p + p { margin-top: 18px; }
+  footer { background: var(--ink); color: var(--goldenrod); padding: 0 4vw 36px; font-size: 16px; }
+
+  @media (max-width: 900px) {
+    .shout, .how { grid-template-columns: 1fr; }
+    .shout h1 { white-space: normal; font-size: 27vw; }
+    .tab:nth-child(n+6) { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tab { transition: none; } .tab.torn { animation: none; visibility: hidden; } }
+</style>
+</head>
+<body>
+
+<svg class="grain" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.1 -.25"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+
+<section class="flyer">
+  <header class="nav">
+    <a href="#">Amateur Hour, San Francisco</a>
+    <a href="#">Log in</a>
+  </header>
+
+  <div class="shout">
+    <h1 class="poster">Brain rot?</h1>
+    <h2 class="poster">Try something entirely new every week.</h2>
+    <p>Small hands-on classes around the city for things you've never done. We pick two a week and you choose one. Bring a friend. Fills the long winter evenings.</p>
+  </div>
+
+  <div>
+    <div class="take"><span>Take one.</span><span>Classes this month</span></div>
+    <div class="tabs" id="tabs">
+      <button class="tab" data-what="Rock crabbing" data-when="Saturday at 9am, on the San Francisco coast"><b>Rock crabbing</b><span>Sat 9am</span></button>
+      <button class="tab" data-what="Glassblowing" data-when="Thursday at 6:30pm, at Public Glass in the Bayview"><b>Glassblowing</b><span>Thu 6:30pm</span></button>
+      <button class="tab" data-what="Flying trapeze" data-when="Tuesday at 7pm, at Circus Center"><b>Flying trapeze</b><span>Tue 7pm</span></button>
+      <button class="tab" data-what="Ramen from scratch" data-when="Wednesday at 6:30pm, in the Mission"><b>Ramen from scratch</b><span>Wed 6:30pm</span></button>
+      <button class="tab" data-what="Letterpress" data-when="Thursday at 6:30pm, at the Center for the Book"><b>Letterpress</b><span>Thu 6:30pm</span></button>
+      <button class="tab" data-what="Boxing" data-when="Monday at 6pm, at 3rd Street Boxing Gym"><b>Boxing</b><span>Mon 6pm</span></button>
+      <button class="tab" data-what="Fly casting" data-when="Saturday at 9:30am, at the Golden Gate Park casting pools"><b>Fly casting</b><span>Sat 9:30am</span></button>
+      <button class="tab" data-what="Mushroom foraging" data-when="Sunday at 10am, in West Marin"><b>Mushroom foraging</b><span>Sun 10am</span></button>
+      <button class="tab" data-what="Improv" data-when="Saturday at noon, at Endgames Improv"><b>Improv</b><span>Sat 12pm</span></button>
+      <button class="tab" data-what="Beekeeping" data-when="Saturday at 1pm, at Garden for the Environment"><b>Beekeeping</b><span>Sat 1pm</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <h2 class="poster">Counteract your brainrot.</h2>
+  <div>
+    <p>Work asks less of your head every month, and most evenings go to a screen. A normal week doesn't hand you many chances to learn something from scratch anymore.</p>
+    <p>Members get a text every Sunday with two classes. Pick one, show up, and be a beginner for a couple of hours with eight or so other people. You won't like all of them.</p>
+    <p>There's no catalogue and there are no reviews to read.</p>
+  </div>
+</section>
+<footer>Amateur Hour, San Francisco</footer>
+
+<div class="slip-wrap" id="slipWrap" role="dialog" aria-modal="true" aria-labelledby="slipWhat">
+  <div class="slip">
+    <h3 class="poster" id="slipWhat"></h3>
+    <p id="slipWhen"></p>
+    <form id="slipForm">
+      <input type="tel" placeholder="Your phone number" aria-label="Your phone number" required>
+      <button type="submit">Save my spot</button>
+      <button type="button" class="back" id="slipBack">Put it back</button>
+    </form>
+    <p class="done" id="slipDone">Spot saved. Check your texts.</p>
+  </div>
+</div>
+
+<script>
+  const wrap = document.getElementById('slipWrap');
+  const form = document.getElementById('slipForm');
+  const done = document.getElementById('slipDone');
+  let last = null;
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      last = tab;
+      tab.classList.add('torn');
+      document.getElementById('slipWhat').textContent = tab.dataset.what;
+      document.getElementById('slipWhen').textContent = tab.dataset.when + '. Leave your number and we\'ll save you a spot.';
+      form.style.display = ''; done.style.display = 'none';
+      setTimeout(() => { wrap.classList.add('open'); form.querySelector('input').focus(); }, 380);
+    });
+  });
+  function close(putBack) {
+    wrap.classList.remove('open');
+    if (putBack && last) last.classList.remove('torn');
+  }
+  document.getElementById('slipBack').addEventListener('click', () => close(true));
+  wrap.addEventListener('click', e => { if (e.target === wrap) close(done.style.display !== 'block'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && wrap.classList.contains('open')) close(done.style.display !== 'block'); });
+  form.addEventListener('submit', e => { e.preventDefault(); form.style.display = 'none'; done.style.display = 'block'; });
+</script>
+</body>
+</html>

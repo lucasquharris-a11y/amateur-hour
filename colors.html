@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour · Accent options</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; font-family: "Hanken Grotesk", system-ui, sans-serif; background: #f7f6f1; color: #191a17; font-size: 17px; line-height: 1.5; }
+  main { max-width: 1320px; margin: 0 auto; padding: 48px 28px 90px; }
+  h1 { font-size: 36px; letter-spacing: -.02em; margin: 0 0 8px; }
+  p { margin: 0; max-width: 46em; }
+  .grid { margin-top: 36px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px 28px; }
+  .opt a.frame { display: block; position: relative; aspect-ratio: 1280 / 760; overflow: hidden; border: 1px solid #d8d5c9; border-radius: 6px; }
+  .opt iframe { position: absolute; top: 0; left: 0; width: 1280px; height: 760px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .opt h2 { font-size: 19px; margin: 14px 0 2px; }
+  .opt h2 a { color: inherit; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Accent colour options</h1>
+  <p>The green, cream and card manila stay. Only the orange-yellow changes. Click any one to open it full size; the choice carries through to sign-up.</p>
+  <div class="grid">
+    <div class="opt"><a class="frame" href="home.html?accent=pink"><iframe src="home.html?accent=pink" tabindex="-1" title="Dusty pink"></iframe></a><h2><a href="home.html?accent=pink">Dusty pink</a></h2><p>Warm and soft against the green. The most 70s-kitchen of the set, and it keeps the page friendly.</p></div>
+    <div class="opt"><a class="frame" href="home.html?accent=butter"><iframe src="home.html?accent=butter" tabindex="-1" title="Butter"></iframe></a><h2><a href="home.html?accent=butter">Butter</a></h2><p>The same idea as now with the orange taken out: a pale, milky yellow that sits close to the punch card.</p></div>
+    <div class="opt"><a class="frame" href="home.html?accent=tomato"><iframe src="home.html?accent=tomato" tabindex="-1" title="Tomato"></iframe></a><h2><a href="home.html?accent=tomato">Tomato</a></h2><p>The only strong one. Loud next to the green, with cream type on the card.</p></div>
+    <div class="opt"><a class="frame" href="home.html?accent=sky"><iframe src="home.html?accent=sky" tabindex="-1" title="Powder blue"></iframe></a><h2><a href="home.html?accent=sky">Powder blue (the default now)</a></h2><p>Cool and calm. It sits near the blue pen, so the handwriting stands out less.</p></div>
+    <div class="opt"><a class="frame" href="home.html?accent=lilac"><iframe src="home.html?accent=lilac" tabindex="-1" title="Lilac"></iframe></a><h2><a href="home.html?accent=lilac">Lilac</a></h2><p>The least expected next to forest green. Playful, a little sweeter.</p></div>
+    <div class="opt"><a class="frame" href="home.html?accent=sage"><iframe src="home.html?accent=sage" tabindex="-1" title="Sage"></iframe></a><h2><a href="home.html?accent=sage">Sage</a></h2><p>No second colour at all, only a lighter green. The quietest and most natural.</p></div>
+    <div class="opt"><a class="frame" href="home.html?accent=marigold"><iframe src="home.html?accent=marigold" tabindex="-1" title="Before: marigold"></iframe></a><h2><a href="home.html?accent=marigold">Before: marigold</a></h2><p>The orange-yellow you were unsure about.</p></div>
+  </div>
+</main>
+<script>
+  function fit() { document.querySelectorAll('.opt .frame').forEach(f => f.querySelector('iframe').style.transform = 'scale(' + f.clientWidth / 1280 + ')'); }
+  fit(); addEventListener('resize', fit);
+</script>
+</body>
+</html>

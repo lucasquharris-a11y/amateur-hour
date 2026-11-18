@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Join Amateur Hour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css?v=1795040581">
+<script src="fonts.js?v=1795040581"></script>
+<style>
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
+
+  /* progress: a strip of card that gets punched */
+  .strip { display: flex; gap: 11px; background: var(--manila); padding: 9px 15px; border-radius: 9px; box-shadow: 3px 4px 0 rgba(29, 74, 53, .14); rotate: 1deg; }
+  .strip i { width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid var(--spruce); transition: scale .3s cubic-bezier(.3, 1.6, .5, 1); }
+  .strip i.done { background: var(--paper); border-color: transparent; box-shadow: inset 0 2px 2px rgba(20, 54, 38, .4); }
+  .strip i.now { border-style: dashed; scale: 1.15; }
+  .strip.hide { visibility: hidden; }
+
+  .flow { flex: 1; display: flex; justify-content: center; padding: 9vh 6.5vw 60px; }
+  .q { display: none; width: 100%; max-width: 680px; }
+  .q.wide { max-width: 1040px; }
+  .q.on { display: block; animation: enter .4s ease-out both; }
+  @keyframes enter { from { opacity: 0; transform: translateY(14px); } }
+  .q h1 { font-weight: 400; font-size: clamp(38px, 4.1vw, 58px); line-height: 1.05; letter-spacing: -.02em; }
+  .q .sub { margin-top: 14px; max-width: 27em; }
+
+  .field {
+    display: block; width: 100%; margin-top: 44px;
+    font-family: var(--ui); font-weight: 600; font-size: clamp(30px, 3.2vw, 42px); letter-spacing: -.01em;
+    color: var(--ink); background: transparent;
+    border: 0; border-bottom: 2.5px solid var(--spruce); border-radius: 0; padding: 6px 0 10px;
+  }
+  .field::placeholder { color: var(--ink); opacity: .3; }
+  .field:focus { outline: none; border-bottom-color: var(--pen); }
+  .field.code { letter-spacing: .5em; max-width: 7.2em; }
+  .actions { margin-top: 38px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .fine { margin-top: 22px; font-family: var(--ui); font-size: 15px; font-weight: 500; }
+
+  .chips { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    font-family: var(--ui); font-weight: 600; font-size: 18px; line-height: 1;
+    padding: 14px 20px; border-radius: 999px; cursor: pointer;
+    border: 2px solid var(--spruce); background: transparent; color: var(--spruce);
+    transition: background .12s, color .12s, scale .12s;
+  }
+  .chip:hover { background: rgba(29, 74, 53, .08); }
+  .chip[aria-pressed="true"] { background: var(--spruce); color: var(--paper); }
+  .chip:active { scale: .96; }
+
+  /* either-or uses the same two cards as the weekly choice */
+  .either { margin-top: 44px; display: inline-flex; }
+  .either .pick-card { --w: 250px; min-height: 250px; justify-content: flex-end; }
+  .either .pick-card h3 { font-size: 38px; }
+  .either.out { animation: leave .25s ease-in forwards; }
+  @keyframes leave { to { opacity: 0; transform: translateX(-24px); } }
+  .count { margin-top: 44px; font-family: var(--ui); font-weight: 600; font-size: 15px; }
+
+  /* first pick */
+  .first { margin-top: 46px; display: inline-flex; gap: 22px; }
+  .first .pick-card { --w: 300px; }
+  .first .pick-card .facts { font-size: 17px; }
+  .first.chosen .pick-card:not(.sel) { opacity: .25; }
+  .first.chosen .pick-card.sel { translate: 0 -8px; }
+
+  /* confirmation */
+  .done-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 5vw; align-items: center; }
+  .card-left { justify-self: center; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; width: min(100%, 540px); }
+  .card-left .aside { margin-left: 30px; }
+  .done-grid .punch { rotate: 2deg; }
+  .next { margin-top: 30px; border-bottom: 1.5px solid rgba(29, 74, 53, .28); font-family: var(--ui); }
+  .nrow { display: flex; align-items: center; justify-content: space-between; gap: 22px; min-height: 84px; padding: 14px 0; border-top: 1.5px solid rgba(29, 74, 53, .28); }
+  .nrow p { font-size: 18px; font-weight: 500; line-height: 1.3; }
+  .nrow .btn { padding: 14px 22px; font-size: 16px; }
+  .nrow form { flex: 1; display: flex; gap: 10px; }
+  .nrow input { flex: 1; min-width: 0; font-family: var(--ui); font-weight: 500; font-size: 17px; padding: 12px 18px; border-radius: 999px; border: 2px solid var(--spruce); background: transparent; color: var(--ink); }
+  .done-grid .actions { margin-top: 24px; }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 600px) {
+    .top { padding: 20px 20px 0; gap: 12px; }
+    .top .wordmark { font-size: 23px; }
+    .strip { gap: 5px; padding: 7px 9px; flex: none; }
+    .strip i { width: 11px; height: 11px; }
+    .flow { padding: 5vh 20px 48px; }
+    .q h1 { font-size: 34px; }
+    .field { margin-top: 32px; font-size: 30px; }
+    .chips { margin-top: 26px; gap: 8px; }
+    .chip { font-size: 16px; padding: 12px 16px; }
+    .first { gap: 12px; margin-top: 30px; }
+    .first .pick-card .does { display: none; }
+    .first .pick-card .facts { font-size: 14.5px; }
+    .done-grid { gap: 40px; }
+    .nrow { gap: 14px; min-height: 0; }
+    .nrow p { font-size: 16px; }
+    .nrow .btn { padding: 13px 16px; font-size: 15px; }
+    .card-left .aside { margin-left: 16px; }
+  }
+  @media (max-width: 860px) {
+    .flow { padding-top: 6vh; }
+    .either .pick-card { --w: 41vw; min-height: 41vw; }
+    .either .pick-card h3 { font-size: 26px; }
+    .first .pick-card { --w: 41vw; }
+    .done-grid { grid-template-columns: 1fr; }
+    .strip { gap: 7px; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="wordmark" href="index.html">Amateur H<i class="chad"></i>ur</a>
+  <div class="strip" id="strip" role="img" aria-label="Sign-up progress"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</header>
+
+<main class="flow">
+
+  <form class="q" data-step="phone">
+    <h1 id="phoneTitle">What's your number?</h1>
+    <p class="sub">Membership is $50 a month. We'll text you a code to sign in.</p>
+    <input class="field" id="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(415) 555-0134" aria-labelledby="phoneTitle">
+    <div class="actions"><button class="btn" id="phoneNext" disabled>Text me a code</button></div>
+  </form>
+
+  <form class="q" data-step="code">
+    <h1 id="codeTitle">Enter the code we sent.</h1>
+    <p class="sub">It went to <span id="sentTo"></span>.</p>
+    <input class="field code" id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="4" placeholder="0000" aria-labelledby="codeTitle">
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button></div>
+    <p class="fine">Prototype: any four digits work.</p>
+  </form>
+
+  <form class="q" data-step="name">
+    <h1 id="nameTitle">What should we call you?</h1>
+    <input class="field" id="name" type="text" autocomplete="given-name" placeholder="First name" aria-labelledby="nameTitle">
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button><button class="btn" id="nameNext" disabled>Next</button></div>
+  </form>
+
+  <form class="q" data-step="already">
+    <h1><span data-name></span>, what do you already do?</h1>
+    <p class="sub">Tap anything you've done more than a couple of times. We'll steer you away from it.</p>
+    <div class="chips" id="alreadyChips"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button><button class="btn" id="alreadyNext">None of these</button></div>
+  </form>
+
+  <div class="q" data-step="either">
+    <h1>Which sounds more like you?</h1>
+    <div class="pair either" id="either">
+      <button class="pick-card gold" type="button"><h3></h3></button>
+      <button class="pick-card green" type="button"><h3></h3></button>
+      <span class="or-badge" aria-hidden="true">or</span>
+    </div>
+    <p class="count" id="eitherCount" aria-live="polite"></p>
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button></div>
+  </div>
+
+  <form class="q" data-step="nos">
+    <h1>Anything that's a hard no?</h1>
+    <p class="sub">We'll never send you one of these.</p>
+    <div class="chips" id="nosChips"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button><button class="btn" id="nosNext">No hard nos</button></div>
+  </form>
+
+  <form class="q" data-step="when">
+    <h1>When are you usually free?</h1>
+    <p class="sub">Pick at least one.</p>
+    <div class="chips" id="whenChips"></div>
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button><button class="btn" id="whenNext" disabled>Show me my two</button></div>
+  </form>
+
+  <div class="q" data-step="pick">
+    <h1>Here are your first two, <span data-name></span>.</h1>
+    <p class="sub">Pick one. The other might come round again.</p>
+    <div class="pair first" id="first"></div>
+  </div>
+
+  <div class="q wide" data-step="done">
+    <div class="done-grid">
+      <div>
+        <h1 id="doneTitle"></h1>
+        <p class="sub" id="doneWhen"></p>
+        <div class="next">
+          <div class="nrow">
+            <p id="calText">Connect your calendar and we'll only send you classes you can make.</p>
+            <button class="btn" type="button" id="calBtn">Connect calendar</button>
+          </div>
+          <div class="nrow">
+            <p id="friendText">Bring a friend along on a day pass.</p>
+            <form id="friendForm" hidden>
+              <input type="tel" id="friendPhone" placeholder="Your friend's number" aria-label="Your friend's number">
+              <button class="btn">Send pass</button>
+            </form>
+            <button class="btn ghost" type="button" id="friendBtn">Bring a friend</button>
+          </div>
+          <div class="nrow">
+            <p id="whoText">See if anyone you know is going.</p>
+            <button class="btn ghost" type="button" id="syncBtn">Sync contacts</button>
+          </div>
+        </div>
+        <div class="actions"><button class="btn ghost" type="button" id="changeBtn">Change my pick</button></div>
+      </div>
+      <div class="card-left">
+      <p class="aside">see you <span id="noteDay"></span> <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+      <div class="punch">
+        <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
+        <div class="punch-fields">
+          <div>Member <span class="line hand" id="cardName"></span></div>
+          <div>No. <span class="line hand">0413</span></div>
+        </div>
+        <div class="slots" id="cardSlots"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="activities.js?v=1795040581"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const ORDER = ['phone', 'code', 'name', 'already', 'either', 'nos', 'when', 'pick', 'done'];
+  const params = new URLSearchParams(location.search);
+  const state = { phone: '', name: '', already: new Set(), either: {}, nos: new Set(), when: new Set(), pick: null, wanted: params.get('pick') || location.hash.slice(1) || null };
+  let current = 'phone', eitherIndex = 0;
+
+  const ALREADY = [['climbing', 'Climbing'], ['pottery', 'Pottery'], ['cooking', 'Cooking classes'], ['instrument', 'An instrument'], ['dance', 'Dancing'], ['boxing', 'Boxing or martial arts'], ['fishing', 'Fishing'], ['improv', 'Improv or stand-up'], ['wood', 'Wood or metal work'], ['art', 'Drawing or printmaking'], ['water', 'Rowing or sailing'], ['garden', 'Gardening']];
+  const NOS = [['heights', 'Heights'], ['water', 'Open water'], ['fire', 'Fire and heat'], ['alcohol', 'Alcohol'], ['bees', 'Bees'], ['shellfish', 'Shellfish']];
+  const WHEN = [['weeknight', 'Weeknight evenings'], ['satam', 'Saturday mornings'], ['satpm', 'Saturday afternoons'], ['sun', 'Sundays']];
+  const EITHER = [
+    { key: 'sweat', a: 'Happy to sweat', b: 'Rather not' },
+    { key: 'outdoors', a: 'Outside, even in the fog', b: 'Indoors, thanks' },
+    { key: 'hands', a: 'Good with my hands', b: 'All thumbs' },
+    { key: 'stage', a: 'Fine on a stage', b: 'Would rather die' }
+  ];
+
+  /* ---------- navigation ---------- */
+  function go(step) {
+    current = step;
+    document.querySelectorAll('.q').forEach(q => q.classList.toggle('on', q.dataset.step === step));
+    const n = ORDER.indexOf(step);
+    [...$('strip').children].forEach((dot, k) => { dot.classList.toggle('done', k < n); dot.classList.toggle('now', k === n); });
+    document.querySelectorAll('[data-name]').forEach(el => el.textContent = state.name);
+    if (step === 'either') renderEither();
+    if (step === 'pick') renderPick();
+    if (step === 'done') renderDone();
+    const focus = document.querySelector('.q.on .field');
+    if (focus) setTimeout(() => focus.focus(), 60);
+    scrollTo(0, 0);
+  }
+  function back() {
+    if (current === 'either' && eitherIndex > 0) { eitherIndex--; renderEither(); return; }
+    if (current === 'nos') eitherIndex = EITHER.length - 1;
+    go(ORDER[ORDER.indexOf(current) - 1]);
+  }
+  document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', back));
+  document.querySelectorAll('form.q').forEach(f => f.addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = f.querySelector('.actions .btn:not(.ghost)');
+    if (btn && btn.disabled) return;
+    if (current === 'code') return;
+    go(ORDER[ORDER.indexOf(current) + 1]);
+  }));
+
+  /* ---------- phone, code, name ---------- */
+  const fmt = d => d.length < 4 ? d : d.length < 7 ? `(${d.slice(0, 3)}) ${d.slice(3)}` : `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+  $('phone').addEventListener('input', e => {
+    const d = e.target.value.replace(/\D/g, '').replace(/^1(?=\d{10})/, '').slice(0, 10);
+    e.target.value = fmt(d);
+    state.phone = fmt(d);
+    $('phoneNext').disabled = d.length !== 10;
+    $('sentTo').textContent = state.phone;
+  });
+  $('code').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (e.target.value.length === 4) setTimeout(() => go('name'), 250);
+  });
+  $('name').addEventListener('input', e => {
+    state.name = e.target.value.trim().replace(/^./, c => c.toUpperCase());
+    $('nameNext').disabled = !state.name;
+  });
+  if (state.wanted) $('phoneTitle').textContent = "Good pick. What's your number?";
+
+  /* ---------- chips ---------- */
+  function chips(boxId, items, set, onChange) {
+    const box = $(boxId);
+    items.forEach(([key, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => {
+        set.has(key) ? set.delete(key) : set.add(key);
+        b.setAttribute('aria-pressed', set.has(key));
+        onChange();
+      });
+      box.appendChild(b);
+    });
+  }
+  chips('alreadyChips', ALREADY, state.already, () => $('alreadyNext').textContent = state.already.size ? 'Next' : 'None of these');
+  chips('nosChips', NOS, state.nos, () => $('nosNext').textContent = state.nos.size ? 'Next' : 'No hard nos');
+  chips('whenChips', WHEN, state.when, () => $('whenNext').disabled = !state.when.size);
+
+  /* ---------- either-or ---------- */
+  const eitherEl = $('either');
+  const [cardA, cardB] = eitherEl.querySelectorAll('.pick-card');
+  function renderEither() {
+    const q = EITHER[eitherIndex];
+    cardA.querySelector('h3').textContent = q.a;
+    cardB.querySelector('h3').textContent = q.b;
+    $('eitherCount').textContent = `${eitherIndex + 1} of ${EITHER.length}`;
+    eitherEl.classList.remove('out');
+    eitherEl.style.animation = 'none'; eitherEl.offsetWidth; eitherEl.style.animation = '';
+    eitherEl.classList.add('in');
+  }
+  function answer(first) {
+    if (eitherEl.classList.contains('out')) return;
+    state.either[EITHER[eitherIndex].key] = first;
+    eitherEl.classList.add('out');
+    setTimeout(() => {
+      if (eitherIndex < EITHER.length - 1) { eitherIndex++; renderEither(); }
+      else go('nos');
+    }, 260);
+  }
+  cardA.addEventListener('click', () => answer(true));
+  cardB.addEventListener('click', () => answer(false));
+
+  /* ---------- choosing the pair ---------- */
+  function choosePair() {
+    const ok = ACTIVITIES.filter(a => !(a.skill && state.already.has(a.skill)) && !(a.nos || []).some(n => state.nos.has(n)));
+    const score = a => {
+      let s = 0;
+      if (state.either.sweat === false && a.effort === 'High') s -= 3;
+      if (state.either.outdoors === false && a.outdoors) s -= 3;
+      if (state.either.outdoors === true && a.outdoors) s += 1;
+      if (state.either.stage === false && a.stage) s -= 3;
+      if (state.either.hands === false && a.kind === 'Made by hand') s += 1;   // all thumbs: more to learn
+      if (state.when.size && state.when.has(a.slot)) s += 2;
+      if (a.check === 'ok') s += 1;
+      if (a.format === 'course') s -= 1;
+      return s;
+    };
+    const ranked = ok.map(a => [score(a), a]).sort((x, y) => y[0] - x[0]).map(x => x[1]);
+    const wanted = ranked.find(a => a.id === state.wanted);
+    const first = wanted || ranked[0];
+    const second = ranked.find(a => a !== first && a.kind !== first.kind) || ranked.find(a => a !== first);
+    return [first, second].filter(Boolean);
+  }
+  function cardHTML(a, tone) {
+    return `<button class="pick-card ${tone}" type="button" data-id="${a.id}">
+      <h3>${a.name}</h3>
+      <div><p class="does">${a.does}</p><div class="facts"><p>${a.when}</p><p>${a.where}</p><p>${a.credits} credits. ${a.spots} spots.</p></div></div>
+    </button>`;
+  }
+  function renderPick() {
+    const pair = choosePair();
+    const el = $('first');
+    el.classList.remove('chosen');
+    el.innerHTML = pair.map((a, k) => cardHTML(a, k ? 'green' : 'gold')).join('') + (pair.length === 2 ? '<span class="or-badge" aria-hidden="true">or</span>' : '');
+    el.querySelectorAll('.pick-card').forEach(c => c.addEventListener('click', () => {
+      state.pick = ACTIVITIES.find(a => a.id === c.dataset.id);
+      el.classList.add('chosen'); c.classList.add('sel');
+      setTimeout(() => go('done'), 520);
+    }));
+  }
+
+  /* ---------- confirmation ---------- */
+  function renderDone() {
+    const a = state.pick;
+    const day = a.when.split(',')[0];
+    $('doneTitle').textContent = `You're going ${a.short}, ${state.name}.`;
+    $('doneWhen').textContent = `${a.when.replace(',', ' at')}, ${a.where}. That's ${a.credits} of your 12 credits this month, and your $50 membership starts today.`;
+    $('cardName').textContent = state.name;
+    $('noteDay').textContent = day;
+    $('cardSlots').innerHTML = Array.from({ length: 12 }, (_, k) => k === 0
+      ? `<div class="slot next"><div class="hole">1</div><div class="what">${a.short.replace(/^./, c => c.toUpperCase())}</div><div class="note hand">${day}</div></div>`
+      : `<div class="slot"><div class="hole">${k + 1}</div>${k === 11 ? '<div class="note hand">free week!</div>' : ''}</div>`).join('');
+    $('calText').textContent = "Connect your calendar and we'll only send you classes you can make.";
+    $('friendText').textContent = 'Bring a friend along on a day pass.';
+    $('whoText').textContent = 'See if anyone you know is going.';
+    ['calBtn', 'friendBtn', 'syncBtn', 'friendText'].forEach(id => $(id).hidden = false);
+    $('friendForm').hidden = true;
+  }
+  $('calBtn').addEventListener('click', () => {
+    const a = state.pick;
+    $('calBtn').hidden = true;
+    $('calText').textContent = `Calendar connected. ${a.short.replace(/^./, c => c.toUpperCase())} is in for ${a.when.replace(',', ' at')}.`;
+  });
+  $('friendBtn').addEventListener('click', () => { $('friendBtn').hidden = true; $('friendText').hidden = true; $('friendForm').hidden = false; $('friendPhone').focus(); });
+  $('friendPhone').addEventListener('input', e => e.target.value = fmt(e.target.value.replace(/\D/g, '').slice(0, 10)));
+  $('friendForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const n = $('friendPhone').value;
+    if (n.replace(/\D/g, '').length !== 10) { $('friendPhone').focus(); return; }
+    $('friendForm').hidden = true; $('friendText').hidden = false;
+    $('friendText').textContent = `Day pass sent to ${n}.`;
+  });
+  $('syncBtn').addEventListener('click', () => {
+    $('syncBtn').hidden = true;
+    $('whoText').textContent = 'Maya R. and Dev P. are going too. (Sample names for the prototype.)';
+  });
+  $('changeBtn').addEventListener('click', () => go('pick'));
+
+  /* ---------- deep links for review: join.html?step=pick&name=Sam ---------- */
+  const jump = params.get('step');
+  if (jump && ORDER.includes(jump)) {
+    state.name = params.get('name') || 'Sam'; state.phone = '(415) 555-0134'; $('sentTo').textContent = state.phone;
+    if (jump === 'done') state.pick = ACTIVITIES.find(a => a.id === (state.wanted || 'glass'));
+    go(jump);
+  } else go('phone');
+</script>
+</body>
+</html>

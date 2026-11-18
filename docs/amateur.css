@@ -1,0 +1,183 @@
+/* Amateur Hour, version 2. Shared by home.html and join.html.
+   Voice: Newsreader (the letter). Objects and controls: Bricolage Grotesque. Pen: Reenie Beanie, used sparingly. */
+:root {
+  --paper: #f2efe6;
+  --paper-2: #e7e2d3;
+  --spruce: #1d4a35;
+  --spruce-deep: #143626;
+  --marigold: #f2b632;
+  --manila: #ead9a0;
+  --manila-edge: #d6c27e;
+  --ink: #18201b;
+  --pen: #18201b; /* handwriting is black ink (was ballpoint blue #2340b5) */
+  --serif: "Newsreader", Georgia, serif;
+  --ui: "Bricolage Grotesque", system-ui, sans-serif;
+  --hand: "Nanum Pen Script", "Reenie Beanie", cursive;
+  --display: var(--serif);
+  --accent-ink: var(--ink);
+  --card-k: .168;
+}
+* { box-sizing: border-box; margin: 0; }
+html { background: var(--paper); }
+body {
+  font-family: var(--serif); font-optical-sizing: auto;
+  background: var(--paper); color: var(--ink);
+  font-size: 20px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { text-wrap: balance; }
+h1, h2, .step h3 { font-family: var(--display); }
+p { text-wrap: pretty; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--pen); outline-offset: 3px; }
+
+.wordmark { white-space: nowrap; font-family: var(--display); font-style: italic; font-size: 28px; letter-spacing: -.01em; text-decoration: none; color: var(--spruce); }
+.hand { font-family: var(--hand); color: var(--pen); }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--ui); font-weight: 600; font-size: 17px; line-height: 1;
+  padding: 17px 30px; border-radius: 999px;
+  border: 2px solid var(--spruce); background: var(--spruce); color: var(--paper);
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background .15s, transform .15s;
+}
+.btn:hover { background: var(--spruce-deep); }
+.btn:active { transform: translateY(1px); }
+.btn.ghost { background: transparent; color: var(--spruce); }
+.btn.ghost:hover { background: rgba(29, 74, 53, .08); }
+.btn[disabled] { opacity: .35; cursor: default; pointer-events: none; }
+
+/* ---------- the choice: two cards and an "or" ---------- */
+.pair { position: relative; display: flex; justify-content: center; gap: 18px; }
+.pick-card {
+  --w: 236px;
+  width: var(--w); min-height: calc(var(--w) * 1.36);
+  border: 0; border-radius: 20px; padding: 24px 22px 22px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+  text-align: left; text-decoration: none; cursor: pointer;
+  font-family: var(--ui);
+  box-shadow: 7px 9px 0 rgba(24, 32, 27, .13);
+  transition: translate .2s ease-out, box-shadow .2s ease-out, opacity .3s;
+}
+.pick-card.gold { background: var(--marigold); color: var(--accent-ink); rotate: -2.2deg; }
+.pick-card.green { background: var(--spruce); color: var(--paper); rotate: 1.8deg; translate: 0 14px; }
+.pick-card h3 {
+  font-variation-settings: "wdth" 75; font-weight: 800; letter-spacing: -.012em;
+  font-size: calc(var(--w) * var(--card-k)); line-height: .92;
+}
+.pick-card .facts { font-size: 16px; font-weight: 500; line-height: 1.3; }
+.pick-card .facts p + p { margin-top: 2px; }
+.pick-card .does { font-size: 16px; line-height: 1.32; margin-bottom: 12px; font-weight: 400; }
+a.pick-card.gold:hover, button.pick-card.gold:hover { translate: 0 -6px; box-shadow: 9px 15px 0 rgba(24, 32, 27, .13); }
+a.pick-card.green:hover, button.pick-card.green:hover { translate: 0 8px; box-shadow: 9px 15px 0 rgba(24, 32, 27, .13); }
+.or-badge {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--paper); color: var(--ink);
+  display: grid; place-items: center;
+  font-family: var(--ui); font-variation-settings: "wdth" 75; font-weight: 800; font-size: 25px; line-height: 1; padding-bottom: 3px;
+  pointer-events: none; z-index: 2;
+}
+
+/* ---------- the punch card ---------- */
+.punch {
+  --hole: 46px;
+  width: min(100%, 540px);
+  background: var(--manila); color: var(--spruce);
+  border-radius: 14px; padding: 28px 32px 32px;
+  font-family: var(--ui);
+  box-shadow: 0 1px 0 var(--manila-edge), 9px 12px 0 rgba(29, 74, 53, .14);
+}
+.punch-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--spruce); padding-bottom: 10px; }
+.punch-head .wordmark { font-size: 30px; }
+.punch-head span:last-child { font-weight: 600; font-size: 15px; }
+.punch-fields { display: flex; gap: 26px; margin-top: 14px; font-size: 15px; font-weight: 500; }
+.punch-fields div { display: flex; align-items: baseline; gap: 8px; }
+.punch-fields div:first-child { flex: 1; }
+.punch-fields .line { flex: 1; border-bottom: 1.5px solid var(--spruce); padding: 0 4px; min-width: 56px; font-size: 27px; line-height: .9; }
+.slots { margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 8px; align-items: start; }
+.slot { text-align: center; }
+.hole {
+  width: var(--hole); height: var(--hole); margin: 0 auto 7px; border-radius: 50%;
+  border: 2px solid var(--spruce); display: grid; place-items: center;
+  font-weight: 600; font-size: 15px;
+}
+.slot.punched .hole { background: var(--paper); border-color: transparent; box-shadow: inset 0 3px 3px rgba(20, 54, 38, .35); color: transparent; }
+.slot.next .hole { border-style: dashed; }
+.slot .what { font-weight: 600; font-size: 15px; line-height: 1.2; }
+.slot .note { font-size: 23px; line-height: .95; margin-top: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+}
+
+/* ---------- type options, switched with ?font=b|c|d|e (see fonts.js). Default (a) is Newsreader + condensed Bricolage. ---------- */
+html[class*="f-"] { --card-k: .15; }
+html[class*="f-"] .tag h3 { font-size: 25px; line-height: 1; }
+html[class*="f-"] .either .pick-card h3 { font-size: 31px; }
+html[class*="f-"] .wordmark { font-style: normal; }
+
+/* b: Young Serif + Figtree. Sturdy, warm, plain-spoken. */
+html.f-young { --display: "Young Serif", Georgia, serif; --serif: "Figtree", system-ui, sans-serif; --ui: "Figtree", system-ui, sans-serif; --h1: clamp(46px, 5.5vw, 88px); }
+html.f-young h1, html.f-young h2 { letter-spacing: -.02em; }
+html.f-young body { font-size: 19px; }
+
+/* c: Fraunces, soft. One family for headline and letter. */
+html.f-fraunces { --display: "Fraunces", Georgia, serif; --serif: "Fraunces", Georgia, serif; --ui: "Hanken Grotesk", system-ui, sans-serif; --h1: clamp(48px, 5.8vw, 92px); }
+html.f-fraunces h1, html.f-fraunces h2, html.f-fraunces .step h3, html.f-fraunces .wordmark { font-variation-settings: "SOFT" 100; letter-spacing: -.03em; }
+html.f-fraunces body { font-size: 19px; }
+
+/* d: Caprasimo + Hanken Grotesk. The chunky 70s look from the punch-card direction. */
+html.f-capra { --display: "Caprasimo", Georgia, serif; --serif: "Hanken Grotesk", system-ui, sans-serif; --ui: "Hanken Grotesk", system-ui, sans-serif; --h1: clamp(44px, 5.2vw, 84px); }
+html.f-capra h1, html.f-capra h2 { color: var(--spruce); letter-spacing: -.005em; }
+html.f-capra .week h2 { color: var(--paper); }
+html.f-capra body { font-size: 19px; }
+
+/* e: Bricolage Grotesque throughout, serif letter. Friendly sans headline. */
+html.f-brico { --display: "Bricolage Grotesque", system-ui, sans-serif; --h1: clamp(48px, 5.7vw, 92px); }
+html.f-brico h1, html.f-brico h2, html.f-brico .step h3 { font-weight: 700; letter-spacing: -.035em; }
+html.f-brico .wordmark { font-weight: 700; letter-spacing: -.03em; }
+html.f-brico .pick-card h3, html.f-brico .tag h3 { font-variation-settings: "wdth" 100; }
+
+/* placeholder logo: the o in "Hour" is the chad punched out of the card */
+.chad { display: inline-block; width: .47em; height: .47em; border-radius: 50%; background: var(--marigold); margin: 0 .035em 0 .02em; }
+.punch .chad { background: var(--spruce); }
+
+/* f: keep the Newsreader headline and letter, plain Figtree on cards and controls. The smallest change. */
+html.f-plain { --ui: "Figtree", system-ui, sans-serif; }
+html.f-plain .wordmark { font-style: italic; }
+
+/* ---------- accent options in place of the marigold, switched with ?accent= ---------- */
+html.c-butter { --marigold: #f3de8e; }
+html.c-pink { --marigold: #f1b9a9; }
+html.c-tomato { --marigold: #d84a30; --accent-ink: var(--paper); }
+html.c-sky { --marigold: #a9cbe5; }
+html.c-lilac { --marigold: #cdbce8; }
+html.c-sage { --marigold: #b6d3ac; }
+
+/* ---------- handwritten asides: one small note or doodle per section ---------- */
+.aside { font-family: var(--hand); color: var(--pen); font-size: calc(clamp(27px, 2.3vw, 34px) * var(--hk, 1)); line-height: 1; rotate: -3deg; display: inline-flex; align-items: flex-end; gap: 8px; white-space: nowrap; }
+.aside svg { flex: none; width: 42px; height: 46px; overflow: visible; margin-bottom: -18px; }
+.aside path, .doodle path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.aside.up svg { transform: scaleY(-1); margin-bottom: 14px; }
+
+/* ---------- phones ---------- */
+@media (max-width: 600px) {
+  body { font-size: 18px; }
+  .punch { padding: 20px 18px 24px; --hole: 40px; }
+  .punch-head .wordmark { font-size: 24px; }
+  .punch-head span:last-child { font-size: 13px; }
+  .punch-fields { gap: 14px; font-size: 14px; }
+  .punch-fields .line { font-size: 23px; min-width: 44px; }
+  .slots { gap: 16px 4px; }
+  .slot .what { font-size: 13px; }
+  .slot .note { font-size: 20px; }
+  .aside { font-size: 27px; white-space: normal; }
+  .pick-card { padding: 18px 16px 16px; border-radius: 16px; }
+  .pick-card .facts { font-size: 14px; }
+  .or-badge { width: 48px; height: 48px; font-size: 20px; }
+  .btn { padding: 16px 24px; }
+}

@@ -47,7 +47,7 @@
   // carry explicit choices across to the other page
   if (q.get('font') || accent || q.get('hand')) document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
-    if (!a || !/^(join|index)\.html/.test(a.getAttribute('href'))) return;
+    if (!a || !/^(join|home)\.html/.test(a.getAttribute('href'))) return;
     var u = new URL(a.href);
     ['font', 'accent', 'hand'].forEach(function (k) { if (q.get(k)) u.searchParams.set(k, q.get(k)); });
     a.href = u.href;

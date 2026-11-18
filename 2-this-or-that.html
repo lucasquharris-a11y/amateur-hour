@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour · Direction 2, This or that</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f2e7;
+    --ink: #1b1b18;
+    --green: #1e5b3f;
+    --marigold: #f2b632;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-variation-settings: "wdth" 100;
+    background: var(--paper); color: var(--ink);
+    font-size: 18px; line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .poster { font-variation-settings: "wdth" 75; font-weight: 800; letter-spacing: -.015em; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  /* ---------- hero: the choice is the page ---------- */
+  .hero { min-height: 100vh; display: grid; grid-template-rows: auto auto 1fr; }
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 3vw 0; }
+  .wordmark { font-size: 26px; text-decoration: none; }
+  .nav a.login { font-weight: 600; text-decoration: none; }
+  .nav a.login:hover { text-decoration: underline; }
+
+  .pitch { padding: 4vh 3vw 4vh; display: flex; justify-content: space-between; align-items: end; gap: 4vw; }
+  .pitch h1 { font-size: clamp(44px, 5.6vw, 88px); line-height: .92; max-width: 11em; }
+  .pitch p { font-size: clamp(18px, 1.5vw, 22px); font-weight: 500; max-width: 17em; padding-bottom: 6px; }
+
+  .choice { position: relative; display: flex; min-height: 440px; }
+  .tile {
+    flex: 1 1 0; min-width: 0;
+    border: 0; text-align: left; font: inherit; cursor: pointer;
+    padding: 4.5vh 3vw;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: flex-grow .5s cubic-bezier(.2, .8, .2, 1);
+  }
+  .tile.a { background: var(--green); color: var(--paper); }
+  .tile.b { background: var(--marigold); color: var(--ink); }
+  .tile h2 { font-size: clamp(48px, 6.6vw, 108px); line-height: .88; max-width: 6.5em; }
+  .tile .facts { font-size: clamp(18px, 1.5vw, 22px); font-weight: 500; }
+  .tile .facts p + p { margin-top: 2px; }
+  .tile .pick {
+    display: inline-block; margin-top: 22px;
+    padding: 14px 26px; border-radius: 999px;
+    font-weight: 700; font-size: 18px;
+  }
+  .tile.a .pick { background: var(--paper); color: var(--green); }
+  .tile.b .pick { background: var(--ink); color: var(--marigold); }
+  .tile:hover .pick { transform: translateY(-2px); }
+  .or {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 84px; height: 84px; border-radius: 50%;
+    background: var(--paper); color: var(--ink);
+    display: grid; place-items: center; font-size: 34px;
+    pointer-events: none;
+    transition: left .5s cubic-bezier(.2, .8, .2, 1), opacity .2s;
+  }
+
+  /* picked state */
+  .confirm { display: none; margin-top: 22px; }
+  .confirm p { font-size: clamp(18px, 1.5vw, 22px); font-weight: 500; max-width: 24em; }
+  .confirm form { margin-top: 16px; display: flex; gap: 10px; max-width: 480px; }
+  .confirm input {
+    flex: 1; min-width: 0; font: inherit; padding: 14px 22px; border-radius: 999px;
+    border: 2px solid currentColor; background: transparent; color: inherit;
+  }
+  .confirm input::placeholder { color: inherit; opacity: .75; }
+  .confirm button { font: inherit; font-weight: 700; padding: 14px 26px; border-radius: 999px; border: 0; cursor: pointer; white-space: nowrap; }
+  .tile.a .confirm button { background: var(--paper); color: var(--green); }
+  .tile.b .confirm button { background: var(--ink); color: var(--marigold); }
+  .confirm .done { display: none; margin-top: 16px; font-weight: 700; }
+
+  .choice.picked .or { opacity: 0; }
+  .choice.picked .tile.on { flex-grow: 2.6; cursor: default; }
+  .choice.picked .tile.on .pick { display: none; }
+  .choice.picked .tile.on .confirm { display: block; }
+  .choice.picked .tile:not(.on) h2 { font-size: clamp(32px, 3.4vw, 56px); }
+  .choice.picked .tile:not(.on) .facts p { display: none; }
+  .choice.picked .tile:not(.on) .pick { font-size: 16px; padding: 12px 20px; }
+
+  /* ---------- below ---------- */
+  .rules { padding: 110px 3vw 120px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3vw; }
+  .rules h3 { font-size: clamp(30px, 3.2vw, 48px); line-height: .95; }
+  .rules p { margin-top: 14px; max-width: 22em; font-weight: 500; }
+  .why { background: var(--ink); color: var(--paper); padding: 110px 3vw 120px; }
+  .why h2 { font-size: clamp(44px, 5.6vw, 88px); line-height: .92; max-width: 12em; }
+  .why p { margin-top: 28px; font-size: 21px; max-width: 30em; }
+  .why a.btn {
+    display: inline-block; margin-top: 34px; text-decoration: none; font-weight: 700;
+    background: var(--marigold); color: var(--ink); padding: 16px 30px; border-radius: 999px;
+  }
+  footer { background: var(--ink); color: var(--paper); padding: 0 3vw 36px; font-size: 15px; }
+
+  @media (max-width: 860px) {
+    .pitch { flex-direction: column; align-items: start; }
+    .choice { flex-direction: column; }
+    .or { display: none; }
+    .rules { grid-template-columns: 1fr; gap: 48px; }
+    .confirm form { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tile, .or { transition: none; } }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <header class="nav">
+    <a class="wordmark poster" href="#">Amateur Hour</a>
+    <a class="login" href="#">Log in</a>
+  </header>
+
+  <div class="pitch">
+    <h1 class="poster">Try something entirely new every week.</h1>
+    <p>This week in San Francisco it's one of these two. Pick one.</p>
+  </div>
+
+  <div class="choice" id="choice">
+    <div class="tile a" role="button" tabindex="0" data-name="crabbing">
+      <h2 class="poster">Catch crab off the rocks</h2>
+      <div>
+        <div class="facts">
+          <p>Saturday, November 21, 9am</p>
+          <p>The San Francisco coast, with Sea Forager. 12 spots.</p>
+        </div>
+        <span class="pick">Pick crabbing</span>
+        <div class="confirm">
+          <p>Good pick. Leave your number and we'll hold a spot for you on the rocks.</p>
+          <form><input type="tel" placeholder="Your phone number" aria-label="Your phone number" required><button>Hold my spot</button></form>
+          <p class="done">Spot held. Check your texts.</p>
+        </div>
+      </div>
+    </div>
+    <div class="tile b" role="button" tabindex="0" data-name="glass">
+      <h2 class="poster">Blow a glass cup</h2>
+      <div>
+        <div class="facts">
+          <p>Thursday, November 19, 6:30pm</p>
+          <p>Public Glass, Bayview. 6 spots.</p>
+        </div>
+        <span class="pick">Pick glassblowing</span>
+        <div class="confirm">
+          <p>Good pick. Leave your number and we'll hold a spot for you at the furnace.</p>
+          <form><input type="tel" placeholder="Your phone number" aria-label="Your phone number" required><button>Hold my spot</button></form>
+          <p class="done">Spot held. Check your texts.</p>
+        </div>
+      </div>
+    </div>
+    <div class="or poster" aria-hidden="true">or</div>
+  </div>
+</section>
+
+<section class="rules">
+  <div>
+    <h3 class="poster">Two options a week</h3>
+    <p>We choose them. There's no catalogue to scroll and there are no reviews to read, so picking takes about ten seconds.</p>
+  </div>
+  <div>
+    <h3 class="poster">Things you haven't done</h3>
+    <p>Tell us what you already know how to do and we'll steer you away from it. Classes are small and you use your hands.</p>
+  </div>
+  <div>
+    <h3 class="poster">Bring someone</h3>
+    <p>A friend can come along on a day pass. Sync your contacts and you'll see who you know is already going.</p>
+  </div>
+</section>
+
+<section class="why">
+  <h2 class="poster">Counteract your brainrot.</h2>
+  <p>Work asks less of your head every month and most evenings go to a screen. Once a week, go be a beginner at something. You won't like all of it, and next week there are two more.</p>
+  <a class="btn" href="#choice">Pick this week's</a>
+</section>
+<footer>Amateur Hour, San Francisco</footer>
+
+<script>
+  const choice = document.getElementById('choice');
+  const tiles = choice.querySelectorAll('.tile');
+  function pick(tile) {
+    tiles.forEach(t => t.classList.toggle('on', t === tile));
+    choice.classList.add('picked');
+  }
+  tiles.forEach(tile => {
+    tile.addEventListener('click', e => {
+      if (e.target.closest('form')) return;
+      pick(tile);
+    });
+    tile.addEventListener('keydown', e => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === tile) { e.preventDefault(); pick(tile); }
+    });
+    const form = tile.querySelector('form');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      form.style.display = 'none';
+      tile.querySelector('.done').style.display = 'block';
+    });
+  });
+</script>
+</body>
+</html>

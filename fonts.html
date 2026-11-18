@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour · Type options</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; font-family: "Hanken Grotesk", system-ui, sans-serif; background: #f7f6f1; color: #191a17; font-size: 17px; line-height: 1.5; }
+  main { max-width: 1320px; margin: 0 auto; padding: 48px 28px 90px; }
+  h1 { font-size: 36px; letter-spacing: -.02em; margin: 0 0 8px; }
+  p { margin: 0; max-width: 46em; }
+  .grid { margin-top: 36px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px 28px; }
+  .opt a.frame { display: block; position: relative; aspect-ratio: 1280 / 760; overflow: hidden; border: 1px solid #d8d5c9; border-radius: 6px; }
+  .opt iframe { position: absolute; top: 0; left: 0; width: 1280px; height: 760px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .opt h2 { font-size: 19px; margin: 14px 0 2px; }
+  .opt h2 a { color: inherit; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Type options</h1>
+  <p>Same page, six pairings. Click any one to open it full size; the choice carries through to sign-up.</p>
+  <div class="grid">
+    <div class="opt"><a class="frame" href="home.html?font=b"><iframe src="home.html?font=b" tabindex="-1" title="Option B"></iframe></a><h2><a href="home.html?font=b">B. Young Serif and Figtree</a></h2><p>Sturdy and warm, like a paperback cover. Plain, friendly sans on the cards and in the letter.</p></div>
+    <div class="opt"><a class="frame" href="home.html?font=f"><iframe src="home.html?font=f" tabindex="-1" title="Option F"></iframe></a><h2><a href="home.html?font=f">F. The old serif headline, plain cards</a></h2><p>The smallest change: the headline and letter stay as they were, and only the cards and buttons lose the squeezed poster type.</p></div>
+    <div class="opt"><a class="frame" href="home.html?font=c"><iframe src="home.html?font=c" tabindex="-1" title="Option C"></iframe></a><h2><a href="home.html?font=c">C. Fraunces, soft (the default now)</a></h2><p>Rounder than the old serif. One family carries the headline and the letter.</p></div>
+    <div class="opt"><a class="frame" href="home.html?font=d"><iframe src="home.html?font=d" tabindex="-1" title="Option D"></iframe></a><h2><a href="home.html?font=d">D. Caprasimo and Hanken Grotesk</a></h2><p>The chunky 70s face from the punch-card direction. The most retro and the most styled.</p></div>
+    <div class="opt"><a class="frame" href="home.html?font=e"><iframe src="home.html?font=e" tabindex="-1" title="Option E"></iframe></a><h2><a href="home.html?font=e">E. Bricolage Grotesque</a></h2><p>A sans headline over the serif letter. Lively, a little more app-like.</p></div>
+    <div class="opt"><a class="frame" href="home.html?font=a"><iframe src="home.html?font=a" tabindex="-1" title="Option A"></iframe></a><h2><a href="home.html?font=a">A. Before: Newsreader and condensed Bricolage</a></h2><p>What you reacted to.</p></div>
+  </div>
+</main>
+<script>
+  function fit() { document.querySelectorAll('.opt .frame').forEach(f => f.querySelector('iframe').style.transform = 'scale(' + f.clientWidth / 1280 + ')'); }
+  fit(); addEventListener('resize', fit);
+</script>
+</body>
+</html>

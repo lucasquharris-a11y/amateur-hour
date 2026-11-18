@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Amateur Hour · Handwriting options</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; font-family: "Hanken Grotesk", system-ui, sans-serif; background: #f7f6f1; color: #191a17; font-size: 17px; line-height: 1.5; }
+  main { max-width: 1320px; margin: 0 auto; padding: 48px 28px 90px; }
+  h1 { font-size: 36px; letter-spacing: -.02em; margin: 0 0 8px; }
+  p { margin: 0; max-width: 46em; }
+  .grid { margin-top: 36px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px 28px; }
+  .opt a.frame { display: block; position: relative; aspect-ratio: 1280 / 760; overflow: hidden; border: 1px solid #d8d5c9; border-radius: 6px; }
+  .opt iframe { position: absolute; top: 0; left: 0; width: 1280px; height: 760px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .opt h2 { font-size: 19px; margin: 14px 0 2px; }
+  .opt h2 a { color: inherit; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Handwriting options</h1>
+  <p>Same page, nine hands. The choice applies to the headline and to every handwritten note on the site. Click any one to open it full size.</p>
+  <div class="grid">
+    <div class="opt"><a class="frame" href="index.html?hand=covered"><iframe src="index.html?hand=covered" tabindex="-1" title="1. Marker"></iframe></a><h2><a href="index.html?hand=covered">1. Marker</a></h2><p>Quick and confident, like a note on a whiteboard. Bold enough to hold the page.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=caveat"><iframe src="index.html?hand=caveat" tabindex="-1" title="2. Tidy pen"></iframe></a><h2><a href="index.html?hand=caveat">2. Tidy pen (the default now)</a></h2><p>The most readable of the set. Neat, slightly slanted, still clearly written by hand.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=zeyada"><iframe src="index.html?hand=zeyada" tabindex="-1" title="3. Fast scrawl"></iframe></a><h2><a href="index.html?hand=zeyada">3. Fast scrawl</a></h2><p>Loose and natural, like someone jotting it down in a hurry.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=shadows"><iframe src="index.html?hand=shadows" tabindex="-1" title="4. Tall and thin"></iframe></a><h2><a href="index.html?hand=shadows">4. Tall and thin</a></h2><p>Light, upright capitals-style lettering. Calm and a little architectural.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=kalam"><iframe src="index.html?hand=kalam" tabindex="-1" title="5. Fountain pen"></iframe></a><h2><a href="index.html?hand=kalam">5. Fountain pen</a></h2><p>Fluent and even, the handwriting of someone who writes a lot.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=gochi"><iframe src="index.html?hand=gochi" tabindex="-1" title="6. Round felt tip"></iframe></a><h2><a href="index.html?hand=gochi">6. Round felt tip</a></h2><p>Chunky and friendly. The most playful, a bit younger.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=homemade"><iframe src="index.html?hand=homemade" tabindex="-1" title="7. Real cursive"></iframe></a><h2><a href="index.html?hand=homemade">7. Real cursive</a></h2><p>Joined-up handwriting. The most personal and the hardest to read.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=reenie"><iframe src="index.html?hand=reenie" tabindex="-1" title="8. The first one"></iframe></a><h2><a href="index.html?hand=reenie">8. The first one</a></h2><p>The original thin ballpoint scrawl, for comparison.</p></div>
+    <div class="opt"><a class="frame" href="index.html?hand=nanum"><iframe src="index.html?hand=nanum" tabindex="-1" title="9. Before"></iframe></a><h2><a href="index.html?hand=nanum">9. Before</a></h2><p>The one people were not loving.</p></div>
+  </div>
+</main>
+<script>
+  function fit() { document.querySelectorAll('.opt .frame').forEach(f => f.querySelector('iframe').style.transform = 'scale(' + f.clientWidth / 1280 + ')'); }
+  fit(); addEventListener('resize', fit);
+</script>
+</body>
+</html>

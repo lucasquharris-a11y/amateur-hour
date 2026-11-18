@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour · Direction 3, The letter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Reenie+Beanie&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #fcfbf7;
+    --ink: #1a1a17;
+    --pen: #2340b5;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    font-optical-sizing: auto;
+    background: var(--page); color: var(--ink);
+    font-size: 19.5px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--pen); outline-offset: 4px; }
+
+  .nav { display: flex; justify-content: space-between; align-items: baseline; padding: 30px 7vw 0; font-size: 19px; }
+  .wordmark { font-size: 27px; font-style: italic; text-decoration: none; letter-spacing: -.01em; }
+  .nav a.login { text-decoration: none; }
+  .nav a.login:hover { text-decoration: underline; }
+
+  .hero { padding: 6vh 7vw 7vh; min-height: calc(100vh - 80px); display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; column-gap: 5vw; }
+  .hero h1 {
+    grid-column: 1 / -1;
+    font-weight: 400;
+    font-size: clamp(46px, 5.3vw, 84px);
+    line-height: 1.02; letter-spacing: -.022em;
+  }
+  .hero h1 span { display: block; white-space: nowrap; }
+  /* the one pen mark on the page */
+  .mark { position: relative; display: inline-block !important; }
+  .mark svg { position: absolute; left: -2%; bottom: -.16em; width: 104%; height: .3em; overflow: visible; }
+  .mark path { fill: none; stroke: var(--pen); stroke-width: 3.2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+  .list {
+    align-self: end;
+    font-family: "Reenie Beanie", cursive; color: var(--pen);
+    font-size: clamp(30px, 2.5vw, 38px); line-height: 1.12;
+    transform: rotate(-2.5deg); transform-origin: left bottom;
+    padding-bottom: 8px;
+  }
+  .list p:first-child { margin-bottom: 4px; text-decoration: underline; text-underline-offset: 5px; }
+
+  .letter { align-self: end; max-width: 31em; padding-top: 5vh; }
+  .letter p + p { margin-top: .9em; }
+  .letter .btn {
+    display: inline-block; margin-top: 26px; text-decoration: none;
+    background: var(--ink); color: var(--page);
+    padding: 15px 30px; border-radius: 999px; font-size: 19px;
+  }
+  .letter .btn:hover { background: #000; }
+
+  .week { padding: 4vh 7vw 14vh; display: grid; grid-template-columns: 1fr 1fr; column-gap: 5vw; }
+  .week h2 { font-weight: 400; font-size: clamp(34px, 3.6vw, 54px); line-height: 1.08; letter-spacing: -.018em; max-width: 11em; }
+  .opts p { max-width: 31em; }
+  .opts h3 { font-weight: 500; font-size: 27px; line-height: 1.2; margin-bottom: 4px; }
+  .opts .or { font-style: italic; margin: 22px 0; }
+  .opts .rest { margin-top: 44px; }
+  footer { padding: 0 7vw 44px; font-size: 18px; font-style: italic; }
+
+  @media (max-width: 900px) {
+    .hero, .week { grid-template-columns: 1fr; }
+    .hero h1 span { white-space: normal; }
+    .list { margin-top: 40px; }
+    .week h2 { margin-bottom: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="wordmark" href="#">Amateur Hour</a>
+  <a class="login" href="#">Log in</a>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>
+      <span>Trying something new</span>
+      <span>shouldn't take</span>
+      <span class="mark">hours of research.<svg viewBox="0 0 400 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12 C 60 4, 120 16, 190 9 S 320 5, 397 11"/></svg></span>
+    </h1>
+
+    <div class="list" aria-label="A member's November, in their own handwriting">
+      <p>November</p>
+      <p>rock crabbing ✓</p>
+      <p>trapeze ✓ (never again)</p>
+      <p>ramen ✓</p>
+      <p>glassblowing, Thurs</p>
+    </div>
+
+    <div class="letter">
+      <p>Work asks less of your head every month, and most evenings go to a screen. A normal week doesn't hand you many chances to learn something from scratch anymore.</p>
+      <p>So every Sunday we text you two small classes around San Francisco, for things you've probably never done. You pick one and show up.</p>
+      <p>You won't like all of them. You will have used your hands and met eight people.</p>
+      <a class="btn" href="#">Join in San Francisco</a>
+    </div>
+  </section>
+
+  <section class="week">
+    <h2>This week it's one of these two.</h2>
+    <div class="opts">
+      <h3>Blow a glass cup</h3>
+      <p>Thursday at 6:30pm, at Public Glass in the Bayview. Six people around one furnace.</p>
+      <p class="or">or</p>
+      <h3>Catch crab off the rocks</h3>
+      <p>Saturday at 9am, on the San Francisco coast with Sea Forager. Rock crab, a poke pole and a casting net.</p>
+      <p class="rest">That's the whole decision. There's no catalogue to scroll and there are no reviews. Bring a friend on a day pass if you'd like company.</p>
+    </div>
+  </section>
+</main>
+
+<footer>Amateur Hour, San Francisco. Fills the long winter evenings.</footer>
+</body>
+</html>
