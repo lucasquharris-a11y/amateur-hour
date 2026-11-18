@@ -159,7 +159,7 @@ html.c-lilac { --marigold: #cdbce8; }
 html.c-sage { --marigold: #b6d3ac; }
 
 /* ---------- handwritten asides: one small note or doodle per section ---------- */
-.aside { font-family: var(--hand); color: var(--pen); font-size: clamp(27px, 2.3vw, 34px); line-height: 1; rotate: -3deg; display: inline-flex; align-items: flex-end; gap: 8px; white-space: nowrap; }
+.aside { font-family: var(--hand); color: var(--pen); font-size: calc(clamp(27px, 2.3vw, 34px) * var(--hk, 1)); line-height: 1; rotate: -3deg; display: inline-flex; align-items: flex-end; gap: 8px; white-space: nowrap; }
 .aside svg { flex: none; width: 42px; height: 46px; overflow: visible; margin-bottom: -18px; }
 .aside path, .doodle path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .aside.up svg { transform: scaleY(-1); margin-bottom: 14px; }

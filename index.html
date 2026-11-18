@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="amateur.css?v=1795029232">
-<script src="fonts.js?v=1795029232"></script>
+<link rel="stylesheet" href="amateur.css?v=1795029439">
+<script src="fonts.js?v=1795029439"></script>
 <script>/* handwritten hero headline, written on at load. home.html?hero=type shows the typeset version. */ if (new URLSearchParams(location.search).get('hero') !== 'type') document.documentElement.classList.add('hand-hero');</script>
 <style>
   .nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
@@ -29,7 +29,7 @@
   .mark svg { position: absolute; left: -2%; bottom: -.2em; width: 104%; height: .3em; overflow: visible; }
   .mark path { fill: none; stroke: var(--pen); stroke-width: 3.2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
   /* the headline as handwriting, written across the page on load */
-  .hand-hero .hero h1 { font-family: var(--hand); color: var(--ink); font-size: clamp(62px, 6.9vw, 112px); line-height: .84; letter-spacing: -.01em; word-spacing: -.12em; font-variation-settings: normal; font-weight: 400; }
+  .hand-hero .hero h1 { font-family: var(--hand); color: var(--ink); font-size: calc(clamp(62px, 6.9vw, 112px) * var(--hk, 1)); line-height: var(--hlh, .84); letter-spacing: -.01em; word-spacing: var(--hws, -.12em); font-variation-settings: normal; font-weight: 400; }
   .hand-hero .hero h1 span { width: max-content; padding: .06em .12em .14em 0; margin-bottom: -.2em; animation: write var(--d) var(--t) cubic-bezier(.4, .1, .6, .9) both; }
   .hand-hero .hero h1 span:nth-child(1) { --d: .7s; --t: .35s; }
   .hand-hero .hero h1 span:nth-child(2) { --d: 1.05s; --t: 1.15s; }
@@ -197,7 +197,7 @@
     .wordmark .city { display: none; }
     .nav a.login { white-space: nowrap; }
     .hero { padding: 4vh 20px 56px; min-height: 0; }
-    .hand-hero .hero h1 { font-size: 15.5vw; }
+    .hand-hero .hero h1 { font-size: calc(15.5vw * var(--hk, 1)); }
     .hero h1 { font-size: 12vw; }
     .preview .note { margin-left: 8px; }
     .sec-head { flex-direction: column; align-items: flex-start; gap: 18px; padding: 0 20px; }
@@ -375,7 +375,7 @@
 
 <footer>Amateur Hour, San Francisco. Fills the long winter evenings.</footer>
 
-<script src="activities.js?v=1795029232"></script>
+<script src="activities.js?v=1795029439"></script>
 <script>
   // The belt: every activity once, then repeated so the loop is seamless.
   const tones = ['gold', 'line', 'green', 'manila'];

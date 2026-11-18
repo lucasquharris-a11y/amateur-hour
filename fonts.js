@@ -22,12 +22,33 @@
   var accent = q.get('accent');
   var tone = accent || 'sky';
   if (/^(butter|pink|tomato|sky|lilac|sage)$/.test(tone)) root.classList.add('c-' + tone);
+  // handwriting options: ?hand=reenie|covered|shadows|caveat|gochi|kalam|zeyada|homemade (default: Nanum Pen Script)
+  var H = {
+    reenie: ['Reenie Beanie', 'Reenie+Beanie', 1.16, '-.12em', .84],
+    covered: ['Covered By Your Grace', 'Covered+By+Your+Grace', .98],
+    shadows: ['Shadows Into Light Two', 'Shadows+Into+Light+Two', .95],
+    caveat: ['Caveat', 'Caveat:wght@500;600', 1],
+    gochi: ['Gochi Hand', 'Gochi+Hand', .8],
+    kalam: ['Kalam', 'Kalam:wght@400', .74],
+    zeyada: ['Zeyada', 'Zeyada', 1.12, '-.05em', .86],
+    homemade: ['Homemade Apple', 'Homemade+Apple', .56, '0em', 1.3]
+  };
+  var hand = H[q.get('hand')];
+  if (hand) {
+    var hl = document.createElement('link');
+    hl.rel = 'stylesheet'; hl.href = 'https://fonts.googleapis.com/css2?family=' + hand[1] + '&display=swap';
+    document.head.appendChild(hl);
+    root.style.setProperty('--hand', '"' + hand[0] + '", cursive');
+    root.style.setProperty('--hk', hand[2]);
+    root.style.setProperty('--hws', hand[3] || '0em');
+    root.style.setProperty('--hlh', hand[4] || .9);
+  }
   // carry explicit choices across to the other page
-  if (q.get('font') || accent) document.addEventListener('click', function (e) {
+  if (q.get('font') || accent || hand) document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a || !/^(join|index)\.html/.test(a.getAttribute('href'))) return;
     var u = new URL(a.href);
-    ['font', 'accent'].forEach(function (k) { if (q.get(k)) u.searchParams.set(k, q.get(k)); });
+    ['font', 'accent', 'hand'].forEach(function (k) { if (q.get(k)) u.searchParams.set(k, q.get(k)); });
     a.href = u.href;
   }, true);
 })();
