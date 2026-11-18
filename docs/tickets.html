@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Amateur Hour · Ticket directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css">
+<script src="fonts.js"></script>
+<style>
+  main { padding: 44px 6.5vw 100px; }
+  h1 { font-weight: 400; font-size: 44px; line-height: 1.05; letter-spacing: -.02em; }
+  .intro { margin-top: 10px; max-width: 40em; }
+  .opt { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 5vw; align-items: center; padding: 56px 0; border-top: 2px solid var(--ink); margin-top: 44px; }
+  .opt + .opt { margin-top: 0; }
+  .opt h2 { font-family: var(--ui); font-weight: 800; font-size: 22px; }
+  .opt .say p { margin-top: 8px; max-width: 28em; font-size: 18px; }
+  .demo { justify-self: center; width: min(100%, 560px); }
+  .hand { font-family: var(--hand); }
+  .hint { display: flex; align-items: flex-end; gap: 8px; font-size: calc(32px * var(--hk, 1)); line-height: 1; rotate: -2deg; margin: 0 0 16px 24px; }
+  .hint svg { width: 40px; height: 44px; overflow: visible; margin-bottom: -18px; }
+  .hint path { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  button { font: inherit; color: inherit; text-align: left; cursor: pointer; }
+  .lbl { display: block; font-family: var(--ui); font-weight: 700; font-size: 13px; letter-spacing: .04em; }
+  .name { display: block; font-family: var(--display); font-size: 32px; line-height: 1.03; letter-spacing: -.02em; margin: 8px 0 12px; }
+  .facts { display: block; font-family: var(--ui); font-weight: 500; font-size: 15px; line-height: 1.3; }
+  .tag-mine { position: absolute; font-size: calc(30px * var(--hk, 1)); line-height: 1; opacity: 0; transition: opacity .3s .2s; pointer-events: none; }
+
+  /* A. one strip, two halves, a perforation between them */
+  .strip-row { position: relative; display: flex; filter: drop-shadow(7px 9px 0 rgba(24, 32, 27, .12)); }
+  .half { position: relative; flex: 1; border: 0; padding: 24px 24px 26px; transition: translate .4s cubic-bezier(.2, .9, .3, 1.2), rotate .4s, opacity .3s, border-radius .3s; }
+  .half.a { background: var(--marigold); color: var(--accent-ink); border-radius: 14px 0 0 14px; border-right: 2.5px dashed rgba(24, 32, 27, .55); }
+  .half.b { background: var(--spruce); color: var(--paper); border-radius: 0 14px 14px 0; }
+  .strip-row::before, .strip-row::after { content: ""; position: absolute; left: calc(50% - 12px); width: 24px; height: 24px; border-radius: 50%; background: var(--paper); z-index: 2; }
+  .strip-row::before { top: -12px; } .strip-row::after { bottom: -12px; }
+  [data-picked="a"] .half.a { translate: -18px -12px; rotate: -4deg; border-radius: 14px; border-right-color: transparent; z-index: 3; }
+  [data-picked="b"] .half.b { translate: 18px -12px; rotate: 4deg; border-radius: 14px; z-index: 3; }
+  [data-picked="a"] .half.b, [data-picked="b"] .half.a { opacity: .4; }
+  [data-picked="b"] .half.a { border-right-color: transparent; }
+
+  /* B. one ticket, admit one, punch your pick */
+  .one { position: relative; background: var(--manila); color: var(--spruce); border-radius: 14px; box-shadow: 0 1px 0 var(--manila-edge), 8px 10px 0 rgba(29, 74, 53, .14); rotate: -1deg; }
+  .one::before, .one::after { content: ""; position: absolute; top: 94px; width: 26px; height: 26px; border-radius: 50%; background: var(--paper); }
+  .one::before { left: -13px; } .one::after { right: -13px; }
+  .one-head { display: flex; justify-content: space-between; align-items: baseline; padding: 24px 34px 0; }
+  .one-head b { font-family: var(--display); font-weight: 400; font-size: 38px; line-height: 1; letter-spacing: -.02em; }
+  .one-head span { font-family: var(--ui); font-weight: 700; font-size: 15px; }
+  .one-sub { font-family: var(--ui); font-weight: 600; font-size: 16px; padding: 8px 34px 22px; }
+  .prow { display: grid; grid-template-columns: 62px 1fr; align-items: center; width: 100%; background: none; border: 0; border-top: 2.5px dashed rgba(29, 74, 53, .5); padding: 16px 34px 18px; transition: opacity .3s; }
+  .prow .name { margin: 0 0 4px; font-size: 30px; }
+  .phole { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--spruce); transition: background .15s, box-shadow .15s, scale .3s cubic-bezier(.3, 1.6, .5, 1); }
+  .prow:hover .phole { border-style: dashed; }
+  [data-picked="a"] .prow.a .phole, [data-picked="b"] .prow.b .phole { background: var(--paper); border-color: transparent; box-shadow: inset 0 3px 3px rgba(20, 54, 38, .35); scale: 1.08; }
+  [data-picked="a"] .prow.b, [data-picked="b"] .prow.a { opacity: .38; }
+
+  /* C. two tickets fanned out: take one */
+  .fan { position: relative; height: 370px; }
+  .tkt { position: absolute; width: 400px; display: grid; grid-template-columns: 1fr 92px; border: 0; padding: 0; border-radius: 12px; box-shadow: 7px 9px 0 rgba(24, 32, 27, .12); transition: translate .4s cubic-bezier(.2, .9, .3, 1.2), rotate .4s, opacity .3s; }
+  .tkt .main { padding: 20px 20px 22px 24px; }
+  .tkt .stub { border-left: 2.5px dashed currentColor; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+  .tkt .stub b { font-family: var(--display); font-weight: 400; font-size: 38px; line-height: 1; }
+  .tkt::before, .tkt::after { content: ""; position: absolute; right: 81px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); }
+  .tkt::before { top: -11px; } .tkt::after { bottom: -11px; }
+  .tkt.a { background: var(--marigold); color: var(--accent-ink); left: 0; top: 40px; rotate: -8deg; z-index: 1; }
+  .tkt.b { background: var(--spruce); color: var(--paper); left: 150px; top: 178px; rotate: 6deg; z-index: 2; }
+  .tkt:hover { translate: 0 -8px; }
+  [data-picked="a"] .tkt.a { translate: 20px -64px; rotate: -2deg; z-index: 3; }
+  [data-picked="b"] .tkt.b { translate: -40px -70px; rotate: 1deg; z-index: 3; }
+  [data-picked="a"] .tkt.b, [data-picked="b"] .tkt.a { opacity: .4; }
+  @media (max-width: 900px) { .opt { grid-template-columns: 1fr; gap: 32px; } main { padding: 32px 20px 64px; } .name { font-size: 25px; } .tkt { width: 300px; } .tkt.b { left: 40px; } .half { padding: 18px 14px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Three ticket directions</h1>
+  <p class="intro">Each one is built to say "one or the other" before you touch it. Click an option to see the pick; click it again to reset.</p>
+
+  <section class="opt">
+    <div class="say">
+      <h2>A. One strip, tear one off</h2>
+      <p>The two classes are a single strip of raffle tickets, joined by a perforation. A strip only comes apart one way, so it's obvious you keep one half.</p>
+    </div>
+    <div class="demo" data-demo>
+      <p class="hint hand">tear here. keep one <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+      <div class="strip-row">
+        <button class="half a" data-pick="a"><span class="lbl">Week 1</span><span class="name">Blow a glass cup</span><span class="facts">Thursday, 6:30pm<br>Public Glass, Bayview</span></button>
+        <button class="half b" data-pick="b"><span class="lbl">Week 1</span><span class="name">Catch crab off the rocks</span><span class="facts">Saturday, 9am<br>The coast, with Sea Forager</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt">
+    <div class="say">
+      <h2>B. One ticket, punch your pick</h2>
+      <p>A single "admit one" ticket that's good for either class, with a hole to punch next to each. One ticket can only admit you once, and the punch is the same one that ends up on your card.</p>
+    </div>
+    <div class="demo" data-demo>
+      <div class="one">
+        <div class="one-head"><b>Admit one</b><span>Week 1</span></div>
+        <p class="one-sub">Good for one class. Punch your pick.</p>
+        <button class="prow a" data-pick="a"><span class="phole"></span><span><span class="name">Blow a glass cup</span><span class="facts">Thursday, 6:30pm. Public Glass, Bayview</span></span></button>
+        <button class="prow b" data-pick="b"><span class="phole"></span><span><span class="name">Catch crab off the rocks</span><span class="facts">Saturday, 9am. The coast, with Sea Forager</span></span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt">
+    <div class="say">
+      <h2>C. Two tickets, take one</h2>
+      <p>Two tickets fanned out the way someone holds them out to you. The overlap and the "take one" do the work. Closest to what you saw before, with more life in it.</p>
+    </div>
+    <div class="demo" data-demo>
+      <p class="hint hand">take one <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+      <div class="fan">
+        <button class="tkt a" data-pick="a"><span class="main"><span class="lbl">Admit one</span><span class="name">Blow a glass cup</span><span class="facts">Thursday, 6:30pm<br>Public Glass, Bayview</span></span><span class="stub"><span class="lbl">Week</span><b>1</b></span></button>
+        <button class="tkt b" data-pick="b"><span class="main"><span class="lbl">Admit one</span><span class="name">Catch crab off the rocks</span><span class="facts">Saturday, 9am<br>The coast, with Sea Forager</span></span><span class="stub"><span class="lbl">Week</span><b>1</b></span></button>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+  document.querySelectorAll('[data-demo]').forEach(demo => {
+    demo.querySelectorAll('[data-pick]').forEach(btn => btn.addEventListener('click', () => {
+      const p = btn.dataset.pick;
+      if (demo.dataset.picked === p) delete demo.dataset.picked; else demo.dataset.picked = p;
+    }));
+  });
+</script>
+</body>
+</html>
