@@ -32,7 +32,7 @@ a { color: inherit; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid var(--pen); outline-offset: 3px; }
 
-.wordmark { font-family: var(--display); font-style: italic; font-size: 28px; letter-spacing: -.01em; text-decoration: none; color: var(--spruce); }
+.wordmark { white-space: nowrap; font-family: var(--display); font-style: italic; font-size: 28px; letter-spacing: -.01em; text-decoration: none; color: var(--spruce); }
 .hand { font-family: var(--hand); color: var(--pen); }
 
 /* ---------- buttons ---------- */
@@ -163,3 +163,21 @@ html.c-sage { --marigold: #b6d3ac; }
 .aside svg { flex: none; width: 42px; height: 46px; overflow: visible; margin-bottom: -18px; }
 .aside path, .doodle path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .aside.up svg { transform: scaleY(-1); margin-bottom: 14px; }
+
+/* ---------- phones ---------- */
+@media (max-width: 600px) {
+  body { font-size: 18px; }
+  .punch { padding: 20px 18px 24px; --hole: 40px; }
+  .punch-head .wordmark { font-size: 24px; }
+  .punch-head span:last-child { font-size: 13px; }
+  .punch-fields { gap: 14px; font-size: 14px; }
+  .punch-fields .line { font-size: 23px; min-width: 44px; }
+  .slots { gap: 16px 4px; }
+  .slot .what { font-size: 13px; }
+  .slot .note { font-size: 20px; }
+  .aside { font-size: 27px; white-space: normal; }
+  .pick-card { padding: 18px 16px 16px; border-radius: 16px; }
+  .pick-card .facts { font-size: 14px; }
+  .or-badge { width: 48px; height: 48px; font-size: 20px; }
+  .btn { padding: 16px 24px; }
+}

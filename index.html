@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="amateur.css?v=1795028989">
-<script src="fonts.js?v=1795028989"></script>
+<link rel="stylesheet" href="amateur.css?v=1795029232">
+<script src="fonts.js?v=1795029232"></script>
 <script>/* handwritten hero headline, written on at load. home.html?hero=type shows the typeset version. */ if (new URLSearchParams(location.search).get('hero') !== 'type') document.documentElement.classList.add('hand-hero');</script>
 <style>
   .nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
@@ -191,6 +191,36 @@
   .price .btn { margin-top: 30px; }
   footer { padding: 40px 6.5vw 44px; font-style: italic; font-size: 18px; }
 
+  @media (max-width: 600px) {
+    .nav { padding: 20px 20px 0; }
+    .nav .wordmark { font-size: 25px; }
+    .wordmark .city { display: none; }
+    .nav a.login { white-space: nowrap; }
+    .hero { padding: 4vh 20px 56px; min-height: 0; }
+    .hand-hero .hero h1 { font-size: 15.5vw; }
+    .hero h1 { font-size: 12vw; }
+    .preview .note { margin-left: 8px; }
+    .sec-head { flex-direction: column; align-items: flex-start; gap: 18px; padding: 0 20px; }
+    .sec-head .aside { margin: 0 0 0 4px; }
+    .range { padding-bottom: 64px; }
+    .belt { padding-top: 34px; }
+    .week { padding: 72px 20px 76px; }
+    .week-grid { margin-top: 28px; gap: 20px; }
+    .stage { height: 330px; }
+    .scene .pick-card { --w: 39vw; padding: 15px 14px; }
+    .scene .punch { --hole: 44px; padding: 18px 18px 22px; }
+    .slip { padding: 20px 20px 18px; }
+    .slip h4 { font-size: 32px; }
+    .slip p { font-size: 16.5px; }
+    .bubble { font-size: 18px; }
+    .step { padding: 16px 0 18px; }
+    .step p { font-size: 17px; }
+    .card { padding: 72px 20px 76px; gap: 44px; }
+    .card-left { gap: 22px; }
+    .price { padding: 72px 20px 80px; gap: 36px; }
+    .price .figure { font-size: 15vw; white-space: nowrap; }
+    footer { padding: 32px 20px 36px; }
+  }
   @media (max-width: 940px) {
     .hero, .week-grid, .card, .price { grid-template-columns: 1fr; }
     .hero h1 span { white-space: normal; }
@@ -345,7 +375,7 @@
 
 <footer>Amateur Hour, San Francisco. Fills the long winter evenings.</footer>
 
-<script src="activities.js?v=1795028989"></script>
+<script src="activities.js?v=1795029232"></script>
 <script>
   // The belt: every activity once, then repeated so the loop is seamless.
   const tones = ['gold', 'line', 'green', 'manila'];
