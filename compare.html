@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amateur Hour · Home vs with us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css">
+<script src="fonts.js"></script>
+<style>
+  .label { font-family: var(--ui); font-weight: 700; font-size: 15px; padding: 26px 6.5vw 0; }
+  .label + section { padding-top: 34px; }
+  section { padding: 80px 6.5vw 96px; }
+  section + .label { border-top: 2px solid var(--ink); }
+  h2 { font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; max-width: 14em; }
+  .dd { width: 64px; height: 58px; overflow: visible; }
+  .dd.wide { width: 132px; height: 66px; }
+  .dd path { fill: none; stroke: var(--ink); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+  .hand { font-family: var(--hand); }
+
+  /* A: same Thursday, two ways */
+  .two { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .page { border-radius: 14px; padding: 30px 34px 34px; rotate: -.8deg; }
+  .page.home { background: var(--paper-2); }
+  .page.out { background: var(--manila); rotate: .9deg; box-shadow: 8px 10px 0 rgba(29, 74, 53, .14); }
+  .page h3 { display: flex; align-items: center; gap: 16px; font-family: var(--ui); font-weight: 800; font-size: 26px; line-height: 1.05; }
+  .page ul { list-style: none; padding: 0; margin: 22px 0 0; }
+  .page li { display: grid; grid-template-columns: 74px 1fr; align-items: baseline; padding: 9px 0; border-top: 1.5px dashed rgba(24, 32, 27, .28); }
+  .page li b { font-family: var(--ui); font-weight: 700; font-size: 16px; }
+  .page li span { font-family: var(--hand); font-size: calc(30px * var(--hk, 1)); line-height: 1.05; }
+
+  /* B: twelve weeknights */
+  .twelve { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; }
+  .tvs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 10px; max-width: 460px; }
+  .tv { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .tv .hand { font-size: calc(26px * var(--hk, 1)); line-height: 1; }
+  .twelve .punch { justify-self: center; rotate: 1.6deg; }
+  .twelve .aside { margin-top: 30px; }
+
+  /* C: what you'll remember */
+  .slips { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; }
+  .slipc h3 { font-family: var(--ui); font-weight: 800; font-size: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
+  .slipc p { font-family: var(--hand); font-size: calc(34px * var(--hk, 1)); line-height: 1.1; padding: 12px 0 10px; border-bottom: 1.5px solid rgba(24, 32, 27, .3); min-height: 62px; }
+  .slipc.blank p { opacity: .55; }
+  @media (max-width: 760px) { .two, .twelve, .slips { grid-template-columns: 1fr; } section { padding: 56px 20px 64px; } .label { padding: 20px 20px 0; } .page { padding: 22px 20px 24px; } }
+</style>
+</head>
+<body>
+
+<p class="label">Direction A: the same Thursday, two ways</p>
+<section>
+  <h2>The same Thursday in January, two ways.</h2>
+  <div class="two">
+    <div class="page home">
+      <h3><svg class="dd wide" viewBox="0 0 120 60" aria-hidden="true"><path d="M14 30 C 14 16, 24 12, 40 12 L80 12 C 96 12, 106 16, 106 30"/><path d="M6 30 C 6 24, 16 24, 16 30 L16 44 L104 44 L104 30 C 104 24, 114 24, 114 30 L114 50 L6 50 Z"/><path d="M16 36 L104 36"/><path d="M60 13 L60 36"/><path d="M12 50 L10 56 M108 50 L110 56"/></svg> At home</h3>
+      <ul>
+        <li><b>6:30pm</b><span>dinner on the couch</span></li>
+        <li><b>7:05</b><span>start picking something to watch</span></li>
+        <li><b>7:40</b><span>still picking</span></li>
+        <li><b>9:15</b><span>"are you still watching?"</span></li>
+        <li><b>10:45</b><span>bed. what was that show called?</span></li>
+      </ul>
+    </div>
+    <div class="page out">
+      <h3><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M17 12 L22 46 C 28 49, 34 49, 39 46 L45 12"/><path d="M17 12 C 26 8, 37 8, 45 12 C 37 16, 26 16, 17 12 Z"/><path d="M25 24 L27 38"/><path d="M50 8 l3 -4 M53 14 l5 -1 M47 4 l0 -4"/></svg> With us</h3>
+      <ul>
+        <li><b>6:30pm</b><span>gather molten glass on a pipe</span></li>
+        <li><b>7:05</b><span>blow your first cup. it's lopsided</span></li>
+        <li><b>7:40</b><span>second one's better</span></li>
+        <li><b>9:15</b><span>a drink with five people you just met</span></li>
+        <li><b>10:45</b><span>bed. the cup's on the shelf</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<p class="label">Direction B: twelve weeknights, counted</p>
+<section>
+  <h2>Twelve winter weeknights. Pick a column.</h2>
+  <div class="twelve">
+    <div>
+      <div class="tvs"><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div><div class="tv"><svg class="dd" viewBox="0 0 60 54" aria-hidden="true"><path d="M8 14 C 20 12, 42 12, 52 14 C 54 24, 54 34, 52 44 C 40 46, 20 46, 8 44 C 6 34, 6 24, 8 14 Z"/><path d="M22 13 L16 3 M36 13 L44 4"/><path d="M16 45 L13 51 M44 45 L47 51"/><path d="M16 30 q4 -6 8 0 t8 0 t8 0"/></svg><span class="hand">tv</span></div></div>
+      <p class="aside">can you name three of them?</p>
+    </div>
+    <div class="punch">
+      <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
+      <div class="slots"><div class="slot punched"><div class="hole">1</div><div class="what">Rock crabbing</div></div><div class="slot punched"><div class="hole">2</div><div class="what">Trapeze</div></div><div class="slot punched"><div class="hole">3</div><div class="what">Ramen</div></div><div class="slot punched"><div class="hole">4</div><div class="what">Stand-up</div></div><div class="slot punched"><div class="hole">5</div><div class="what">Glassblowing</div></div><div class="slot punched"><div class="hole">6</div><div class="what">Letterpress</div></div><div class="slot punched"><div class="hole">7</div><div class="what">Boxing</div></div><div class="slot punched"><div class="hole">8</div><div class="what">Beekeeping</div></div><div class="slot punched"><div class="hole">9</div><div class="what">Improv</div></div><div class="slot punched"><div class="hole">10</div><div class="what">Pottery</div></div><div class="slot punched"><div class="hole">11</div><div class="what">Fly casting</div></div><div class="slot punched"><div class="hole">12</div><div class="what">Mushrooms</div></div></div>
+    </div>
+  </div>
+</section>
+
+<p class="label">Direction C: what you'll remember in March</p>
+<section>
+  <h2>What you'll remember in March.</h2>
+  <div class="slips">
+    <div class="slipc blank">
+      <h3>Things I watched this winter</h3>
+      <p>that detective one?</p>
+      <p>something with a chef</p>
+      <p></p>
+      <p></p>
+    </div>
+    <div class="slipc">
+      <h3>Things I did this winter</h3>
+      <p>caught a crab off the rocks</p>
+      <p>fell off a trapeze (there's a net)</p>
+      <p>made ramen. then made it again at home</p>
+      <p>told jokes to a room of strangers</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
