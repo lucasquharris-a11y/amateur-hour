@@ -33,7 +33,8 @@
     zeyada: ['Zeyada', 'Zeyada', 1.12, '-.05em', .86],
     homemade: ['Homemade Apple', 'Homemade+Apple', .56, '0em', 1.3]
   };
-  var hand = H[q.get('hand')];
+  // Caveat (tidy pen) is the default hand (Lucas, 2026-11-18). ?hand=nanum shows the previous one.
+  var hand = H[q.get('hand') || 'caveat'];
   if (hand) {
     var hl = document.createElement('link');
     hl.rel = 'stylesheet'; hl.href = 'https://fonts.googleapis.com/css2?family=' + hand[1] + '&display=swap';
@@ -44,7 +45,7 @@
     root.style.setProperty('--hlh', hand[4] || .9);
   }
   // carry explicit choices across to the other page
-  if (q.get('font') || accent || hand) document.addEventListener('click', function (e) {
+  if (q.get('font') || accent || q.get('hand')) document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a || !/^(join|index)\.html/.test(a.getAttribute('href'))) return;
     var u = new URL(a.href);
