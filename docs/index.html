@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="amateur.css?v=1795041858">
-<script src="fonts.js?v=1795041858"></script>
+<link rel="stylesheet" href="amateur.css?v=1795042060">
+<script src="fonts.js?v=1795042060"></script>
 <script>/* handwritten hero headline, written on at load. home.html?hero=type shows the typeset version. */ if (new URLSearchParams(location.search).get('hero') !== 'type') document.documentElement.classList.add('hand-hero');</script>
 <style>
   .nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
@@ -44,6 +44,10 @@
   .preview .note svg { width: 46px; height: 50px; margin-bottom: -22px; overflow: visible; }
   .preview .note path { fill: none; stroke: var(--pen); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
   .preview { --pw: clamp(190px, 17.6vw, 250px); }
+  .hero .fan { --tw: clamp(260px, 27.5vw, 390px); margin-top: 6px; }
+  .hero .fan.show .tkt { animation: rise .45s both; }
+  .hero .fan.show .tkt.b { animation-delay: .12s; }
+  .hero .fan.leave .tkt { animation: out .38s ease-in forwards; }
   .hero .pick-card { --w: var(--pw); }
   .hero .pair { min-height: calc(var(--pw) * 1.36 + 14px); }
   .hero .pair.show .pick-card { animation: rise .45s both; }
@@ -274,6 +278,7 @@
     .hero h1 span { white-space: normal; }
     .preview { margin-top: 56px; }
     .preview { --pw: min(40vw, 230px); }
+    .hero .fan { --tw: min(74vw, 330px); }
     .hero { padding-left: 20px; padding-right: 20px; }
     .stage { height: 400px; }
     .scene .punch { width: 100%; }
@@ -303,14 +308,10 @@
     </div>
 
     <div class="preview" id="preview">
-      <p class="note hand"><span id="weekNote">week 1. pick one</span>
+      <p class="note hand"><span id="weekNote">week 1. take one</span>
         <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg>
       </p>
-      <div class="pair" id="heroPair"></div>
-      <div class="boxes" aria-hidden="true">
-        <span><svg viewBox="0 0 48 44"><path class="sq" d="M6 9 L36 7 L38 38 L7 40 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg></span>
-        <span><svg viewBox="0 0 48 44"><path class="sq" d="M7 8 L37 9 L36 39 L6 38 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg></span>
-      </div>
+      <div class="fan" id="heroPair"></div>
     </div>
   </section>
 
@@ -443,33 +444,29 @@
 
 <footer>Amateur Hour, San Francisco. Fills the long winter evenings.</footer>
 
-<script src="activities.js?v=1795041858"></script>
+<script src="activities.js?v=1795042060"></script>
 <script>
   // The belt: every activity once, then repeated so the loop is seamless.
   const tones = ['gold', 'line', 'green', 'manila'];
   const tags = ACTIVITIES.map((a, k) => `<div class="tag ${tones[k % 4]}"><h3>${a.name}</h3><p>${a.area}</p></div>`).join('');
   document.getElementById('belt').innerHTML = tags + tags;
 
-  // Hero: a new pair each "week". One gets ticked, then the next two arrive. Hover to hold; click a card to join with it.
+  // Hero: two tickets each "week". One gets taken, then the next two arrive. Hover to hold; click a ticket to join with it.
   const byId = id => ACTIVITIES.find(a => a.id === id);
   const WEEKS = [['glass', 'crab'], ['trapeze', 'ramen'], ['letterpress', 'mushrooms'], ['bees', 'box'], ['forge', 'improv'], ['flycast', 'pot']];
   const pairEl = document.getElementById('heroPair');
-  const boxEls = [...document.querySelectorAll('.boxes span')];
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let week = 0, heroTimer = null;
-  const heroCard = (a, tone) => `<a class="pick-card ${tone}" href="join.html#${a.id}"><h3>${a.name}</h3><div class="facts"><p>${a.when}</p><p>${a.where}</p></div></a>`;
+  const ticket = (a, side, n) => `<a class="tkt ${side}" href="join.html#${a.id}"><span class="main"><span class="lbl">Admit one</span><span class="name">${a.name}</span><span class="facts">${a.when}<br>${a.where}</span></span><span class="stub"><span class="lbl">Week</span><b>${n}</b></span></a>`;
   function heroShow() {
     clearTimeout(heroTimer);
     const [a, b] = WEEKS[week].map(byId);
-    pairEl.className = 'pair show';
-    pairEl.innerHTML = heroCard(a, 'gold') + heroCard(b, 'green') + '<span class="or-badge" aria-hidden="true">or</span>';
-    document.getElementById('weekNote').textContent = `week ${week + 1}. pick one`;
-    boxEls.forEach(b => b.classList.remove('ticked'));
+    pairEl.className = 'fan show';
+    pairEl.innerHTML = ticket(a, 'a', week + 1) + ticket(b, 'b', week + 1);
+    document.getElementById('weekNote').textContent = `week ${week + 1}. take one`;
     if (still) return;
     heroTimer = setTimeout(() => {
-      const side = week % 2;
-      boxEls[side].classList.add('ticked');
-      pairEl.classList.add(side ? 'pick-b' : 'pick-a');
+      pairEl.classList.add(week % 2 ? 'pick-b' : 'pick-a');
       heroTimer = setTimeout(() => {
         pairEl.classList.add('leave');
         heroTimer = setTimeout(() => { week = (week + 1) % WEEKS.length; heroShow(); }, 420);
@@ -478,7 +475,7 @@
   }
   heroShow();
   const previewEl = document.getElementById('preview');
-  previewEl.addEventListener('mouseenter', () => { clearTimeout(heroTimer); pairEl.classList.remove('pick-a', 'pick-b', 'leave'); boxEls.forEach(b => b.classList.remove('ticked')); });
+  previewEl.addEventListener('mouseenter', () => { clearTimeout(heroTimer); pairEl.classList.remove('pick-a', 'pick-b', 'leave'); });
   previewEl.addEventListener('mouseleave', () => { if (!still) heroShow(); });
 
   // "How a week goes": one scene at a time, auto-advancing only while on screen. Click a step to jump.

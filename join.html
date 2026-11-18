@@ -60,11 +60,9 @@
   .count { margin-top: 44px; font-family: var(--ui); font-weight: 600; font-size: 15px; }
 
   /* first pick */
-  .first { margin-top: 46px; display: inline-flex; gap: 22px; }
-  .first .pick-card { --w: 300px; }
-  .first .pick-card .facts { font-size: 17px; }
-  .first.chosen .pick-card:not(.sel) { opacity: .25; }
-  .first.chosen .pick-card.sel { translate: 0 -8px; }
+  .first { --tw: 400px; margin-top: 10px; height: calc(var(--tw) * 1.04); }
+  .first .tkt.b { top: 54%; }
+  .q[data-step="pick"] .aside { margin: 34px 0 0 24px; }
 
   /* confirmation */
   .done-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 5vw; align-items: center; }
@@ -90,9 +88,8 @@
     .field { margin-top: 32px; font-size: 30px; }
     .chips { margin-top: 26px; gap: 8px; }
     .chip { font-size: 16px; padding: 12px 16px; }
-    .first { gap: 12px; margin-top: 30px; }
-    .first .pick-card .does { display: none; }
-    .first .pick-card .facts { font-size: 14.5px; }
+    .first { --tw: min(76vw, 330px); height: calc(var(--tw) * 1.16); }
+    .first .tkt.b { top: 57%; }
     .done-grid { gap: 40px; }
     .nrow { gap: 14px; min-height: 0; }
     .nrow p { font-size: 16px; }
@@ -103,7 +100,6 @@
     .flow { padding-top: 6vh; }
     .either .pick-card { --w: 41vw; min-height: 41vw; }
     .either .pick-card h3 { font-size: 26px; }
-    .first .pick-card { --w: 41vw; }
     .done-grid { grid-template-columns: 1fr; }
     .strip { gap: 7px; padding: 8px 10px; }
   }
@@ -173,8 +169,9 @@
 
   <div class="q" data-step="pick">
     <h1>Here are your first two, <span data-name></span>.</h1>
-    <p class="sub">Pick one. The other might come round again.</p>
-    <div class="pair first" id="first"></div>
+    <p class="sub">The other might come round again.</p>
+    <p class="aside">take one</p>
+    <div class="fan first" id="first"></div>
   </div>
 
   <div class="q wide" data-step="done">
@@ -346,21 +343,20 @@
     const second = ranked.find(a => a !== first && a.kind !== first.kind) || ranked.find(a => a !== first);
     return [first, second].filter(Boolean);
   }
-  function cardHTML(a, tone) {
-    return `<button class="pick-card ${tone}" type="button" data-id="${a.id}">
-      <h3>${a.name}</h3>
-      <div><p class="does">${a.does}</p><div class="facts"><p>${a.when}</p><p>${a.where}</p><p>${a.credits} credits. ${a.spots} spots.</p></div></div>
-    </button>`;
+  function ticketHTML(a, side) {
+    return `<button class="tkt ${side}" type="button" data-id="${a.id}"><span class="main"><span class="lbl">Admit one</span><span class="name">${a.name}</span><span class="facts">${a.when}<br>${a.where}<br>${a.credits} credits. ${a.spots} spots.</span></span><span class="stub"><span class="lbl">Week</span><b>1</b></span></button>`;
   }
   function renderPick() {
     const pair = choosePair();
     const el = $('first');
-    el.classList.remove('chosen');
-    el.innerHTML = pair.map((a, k) => cardHTML(a, k ? 'green' : 'gold')).join('') + (pair.length === 2 ? '<span class="or-badge" aria-hidden="true">or</span>' : '');
-    el.querySelectorAll('.pick-card').forEach(c => c.addEventListener('click', () => {
+    el.className = 'fan first';
+    el.innerHTML = pair.map((a, k) => ticketHTML(a, k ? 'b' : 'a')).join('');
+    el.querySelectorAll('.tkt').forEach(c => c.addEventListener('click', () => {
+      if (state.picking) return;
+      state.picking = true;
       state.pick = ACTIVITIES.find(a => a.id === c.dataset.id);
-      el.classList.add('chosen'); c.classList.add('sel');
-      setTimeout(() => go('done'), 520);
+      el.classList.add(c.classList.contains('a') ? 'pick-a' : 'pick-b');
+      setTimeout(() => { state.picking = false; go('done'); }, 700);
     }));
   }
 
