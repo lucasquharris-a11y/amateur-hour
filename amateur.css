@@ -9,7 +9,7 @@
   --manila: #ead9a0;
   --manila-edge: #d6c27e;
   --ink: #18201b;
-  --pen: #2340b5;
+  --pen: #18201b; /* handwriting is black ink (was ballpoint blue #2340b5) */
   --serif: "Newsreader", Georgia, serif;
   --ui: "Bricolage Grotesque", system-ui, sans-serif;
   --hand: "Reenie Beanie", cursive;
