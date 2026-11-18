@@ -37,6 +37,7 @@
   .field::placeholder { color: var(--ink); opacity: .3; }
   .field:focus { outline: none; border-bottom-color: var(--pen); }
   .field.code { letter-spacing: .5em; max-width: 7.2em; }
+  .field.second { margin-top: 22px; }
   .actions { margin-top: 38px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .fine { margin-top: 22px; font-family: var(--ui); font-size: 15px; font-weight: 500; }
 
@@ -109,7 +110,7 @@
 
 <header class="top">
   <a class="wordmark" href="home.html">Amateur H<i class="chad"></i>ur</a>
-  <div class="strip" id="strip" role="img" aria-label="Sign-up progress"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="strip" id="strip" role="img" aria-label="Sign-up progress"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </header>
 
 <main class="flow">
@@ -133,6 +134,25 @@
     <h1 id="nameTitle">What should we call you?</h1>
     <input class="field" id="name" type="text" autocomplete="given-name" placeholder="First name" aria-labelledby="nameTitle">
     <div class="actions"><button class="btn ghost" type="button" data-back>Back</button><button class="btn" id="nameNext" disabled>Next</button></div>
+  </form>
+
+  <div class="q" data-step="buddy">
+    <h1>Solo, or with someone?</h1>
+    <p class="sub">Plenty of people join with a partner or a good friend and make it their weekly thing. It works just as well on your own.</p>
+    <div class="pair either" id="buddyPair">
+      <button class="pick-card gold" type="button" data-buddy="solo"><h3>Just me</h3></button>
+      <button class="pick-card green" type="button" data-buddy="together"><h3>With someone</h3></button>
+      <span class="or-badge" aria-hidden="true">or</span>
+    </div>
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button></div>
+  </div>
+
+  <form class="q" data-step="buddyinfo">
+    <h1 id="buddyTitle">Who are you doing this with?</h1>
+    <p class="sub">We'll text them an invite to join. Each week you both get the same two classes and take one together.</p>
+    <input class="field" id="buddyName" type="text" autocomplete="off" placeholder="Their first name" aria-label="Their first name">
+    <input class="field second" id="buddyPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Their phone number" aria-label="Their phone number">
+    <div class="actions"><button class="btn ghost" type="button" data-back>Back</button><button class="btn" id="buddyNext" disabled>Next</button></div>
   </form>
 
   <form class="q" data-step="already">
@@ -168,7 +188,7 @@
   </form>
 
   <div class="q" data-step="pick">
-    <h1>Here are your first two, <span data-name></span>.</h1>
+    <h1>Here are your first two, <span data-names></span>.</h1>
     <p class="sub">The other might come round again.</p>
     <p class="aside">take one</p>
     <div class="fan first" id="first"></div>
@@ -218,9 +238,11 @@
 <script src="activities.js"></script>
 <script>
   const $ = id => document.getElementById(id);
-  const ORDER = ['phone', 'code', 'name', 'already', 'either', 'nos', 'when', 'pick', 'done'];
+  const ORDER = ['phone', 'code', 'name', 'buddy', 'buddyinfo', 'already', 'either', 'nos', 'when', 'pick', 'done'];
+  // which punch on the progress strip each screen belongs to
+  const DOT = { phone: 0, code: 1, name: 2, buddy: 3, buddyinfo: 3, already: 4, either: 5, nos: 6, when: 7, pick: 8, done: 8 };
   const params = new URLSearchParams(location.search);
-  const state = { phone: '', name: '', already: new Set(), either: {}, nos: new Set(), when: new Set(), pick: null, wanted: params.get('pick') || location.hash.slice(1) || null };
+  const state = { phone: '', name: '', already: new Set(), either: {}, nos: new Set(), when: new Set(), pick: null, buddy: null, wanted: params.get('pick') || location.hash.slice(1) || null };
   let current = 'phone', eitherIndex = 0;
 
   const ALREADY = [['climbing', 'Climbing'], ['pottery', 'Pottery'], ['cooking', 'Cooking classes'], ['instrument', 'An instrument'], ['dance', 'Dancing'], ['boxing', 'Boxing or martial arts'], ['fishing', 'Fishing'], ['improv', 'Improv or stand-up'], ['wood', 'Wood or metal work'], ['art', 'Drawing or printmaking'], ['water', 'Rowing or sailing'], ['garden', 'Gardening']];
@@ -237,9 +259,10 @@
   function go(step) {
     current = step;
     document.querySelectorAll('.q').forEach(q => q.classList.toggle('on', q.dataset.step === step));
-    const n = ORDER.indexOf(step);
+    const n = DOT[step];
     [...$('strip').children].forEach((dot, k) => { dot.classList.toggle('done', k < n); dot.classList.toggle('now', k === n); });
     document.querySelectorAll('[data-name]').forEach(el => el.textContent = state.name);
+    document.querySelectorAll('[data-names]').forEach(el => el.textContent = state.buddy ? `${state.name} and ${state.buddy.name}` : state.name);
     if (step === 'either') renderEither();
     if (step === 'pick') renderPick();
     if (step === 'done') renderDone();
@@ -250,6 +273,7 @@
   function back() {
     if (current === 'either' && eitherIndex > 0) { eitherIndex--; renderEither(); return; }
     if (current === 'nos') eitherIndex = EITHER.length - 1;
+    if (current === 'already' && !state.buddy) { go('buddy'); return; }
     go(ORDER[ORDER.indexOf(current) - 1]);
   }
   document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', back));
@@ -278,6 +302,20 @@
     state.name = e.target.value.trim().replace(/^./, c => c.toUpperCase());
     $('nameNext').disabled = !state.name;
   });
+  // solo or with someone
+  document.querySelectorAll('[data-buddy]').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.buddy === 'solo') { state.buddy = null; go('already'); }
+    else go('buddyinfo');
+  }));
+  function buddyCheck() {
+    const name = $('buddyName').value.trim().replace(/^./, c => c.toUpperCase());
+    const digits = $('buddyPhone').value.replace(/\D/g, '');
+    const ok = name && digits.length === 10;
+    $('buddyNext').disabled = !ok;
+    state.buddy = ok ? { name, phone: $('buddyPhone').value } : null;
+  }
+  $('buddyName').addEventListener('input', buddyCheck);
+  $('buddyPhone').addEventListener('input', e => { e.target.value = fmt(e.target.value.replace(/\D/g, '').slice(0, 10)); buddyCheck(); });
   if (state.wanted) $('phoneTitle').textContent = "Good pick. What's your number?";
 
   /* ---------- chips ---------- */
@@ -364,15 +402,15 @@
   function renderDone() {
     const a = state.pick;
     const day = a.when.split(',')[0];
-    $('doneTitle').textContent = `You're going ${a.short}, ${state.name}.`;
-    $('doneWhen').textContent = `${a.when.replace(',', ' at')}, ${a.where}. That's ${a.credits} of your 12 credits this month, and your $50 membership starts today.`;
-    $('cardName').textContent = state.name;
+    $('doneTitle').textContent = state.buddy ? `You and ${state.buddy.name} are going ${a.short}.` : `You're going ${a.short}, ${state.name}.`;
+    $('doneWhen').textContent = `${a.when.replace(',', ' at')}, ${a.where}. That's ${a.credits} of your 12 credits this month, and your $50 membership starts today.${state.buddy ? ` We've texted ${state.buddy.name} an invite.` : ''}`;
+    $('cardName').textContent = state.buddy ? `${state.name} + ${state.buddy.name}` : state.name;
     $('noteDay').textContent = day;
     $('cardSlots').innerHTML = Array.from({ length: 12 }, (_, k) => k === 0
       ? `<div class="slot next"><div class="hole">1</div><div class="what">${a.short.replace(/^./, c => c.toUpperCase())}</div><div class="note hand">${day}</div></div>`
       : `<div class="slot"><div class="hole">${k + 1}</div>${k === 11 ? '<div class="note hand">free week!</div>' : ''}</div>`).join('');
     $('calText').textContent = "Connect your calendar and we'll only send you classes you can make.";
-    $('friendText').textContent = 'Bring a friend along on a day pass.';
+    $('friendText').textContent = state.buddy ? 'Bring someone else along on a day pass.' : 'Bring a friend along on a day pass.';
     $('whoText').textContent = 'See if anyone you know is going.';
     ['calBtn', 'friendBtn', 'syncBtn', 'friendText'].forEach(id => $(id).hidden = false);
     $('friendForm').hidden = true;
@@ -400,7 +438,8 @@
   /* ---------- deep links for review: join.html?step=pick&name=Sam ---------- */
   const jump = params.get('step');
   if (jump && ORDER.includes(jump)) {
-    state.name = params.get('name') || 'Sam'; state.phone = '(415) 555-0134'; $('sentTo').textContent = state.phone;
+    state.name = params.get('name') || 'Sam'; state.phone = '(415) 555-0134';
+    if (params.get('with')) state.buddy = { name: params.get('with'), phone: '(415) 555-0199' }; $('sentTo').textContent = state.phone;
     if (jump === 'done') state.pick = ACTIVITIES.find(a => a.id === (state.wanted || 'glass'));
     go(jump);
   } else go('phone');
