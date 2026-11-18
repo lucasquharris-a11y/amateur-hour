@@ -12,7 +12,7 @@
   --pen: #18201b; /* handwriting is black ink (was ballpoint blue #2340b5) */
   --serif: "Newsreader", Georgia, serif;
   --ui: "Bricolage Grotesque", system-ui, sans-serif;
-  --hand: "Reenie Beanie", cursive;
+  --hand: "Nanum Pen Script", "Reenie Beanie", cursive;
   --display: var(--serif);
   --accent-ink: var(--ink);
   --card-k: .168;
@@ -157,3 +157,9 @@ html.c-tomato { --marigold: #d84a30; --accent-ink: var(--paper); }
 html.c-sky { --marigold: #a9cbe5; }
 html.c-lilac { --marigold: #cdbce8; }
 html.c-sage { --marigold: #b6d3ac; }
+
+/* ---------- handwritten asides: one small note or doodle per section ---------- */
+.aside { font-family: var(--hand); color: var(--pen); font-size: clamp(27px, 2.3vw, 34px); line-height: 1; rotate: -3deg; display: inline-flex; align-items: flex-end; gap: 8px; white-space: nowrap; }
+.aside svg { flex: none; width: 42px; height: 46px; overflow: visible; margin-bottom: -18px; }
+.aside path, .doodle path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.aside.up svg { transform: scaleY(-1); margin-bottom: 14px; }

@@ -7,9 +7,9 @@
 <title>Join Amateur Hour</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Reenie+Beanie&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="amateur.css?v=1795028816">
-<script src="fonts.js?v=1795028816"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css?v=1795028972">
+<script src="fonts.js?v=1795028972"></script>
 <style>
   body { min-height: 100vh; display: flex; flex-direction: column; }
   .top { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
@@ -69,7 +69,9 @@
 
   /* confirmation */
   .done-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 5vw; align-items: center; }
-  .done-grid .punch { justify-self: center; rotate: 2deg; }
+  .card-left { justify-self: center; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; width: min(100%, 540px); }
+  .card-left .aside { margin-left: 30px; }
+  .done-grid .punch { rotate: 2deg; }
   .next { margin-top: 30px; border-bottom: 1.5px solid rgba(29, 74, 53, .28); font-family: var(--ui); }
   .nrow { display: flex; align-items: center; justify-content: space-between; gap: 22px; min-height: 84px; padding: 14px 0; border-top: 1.5px solid rgba(29, 74, 53, .28); }
   .nrow p { font-size: 18px; font-weight: 500; line-height: 1.3; }
@@ -100,7 +102,7 @@
 
   <form class="q" data-step="phone">
     <h1 id="phoneTitle">What's your number?</h1>
-    <p class="sub">Membership is $50 a month. We text you two classes every Sunday.</p>
+    <p class="sub">Membership is $50 a month. We'll text you a code to sign in.</p>
     <input class="field" id="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(415) 555-0134" aria-labelledby="phoneTitle">
     <div class="actions"><button class="btn" id="phoneNext" disabled>Text me a code</button></div>
   </form>
@@ -182,6 +184,8 @@
         </div>
         <div class="actions"><button class="btn ghost" type="button" id="changeBtn">Change my pick</button></div>
       </div>
+      <div class="card-left">
+      <p class="aside">see you <span id="noteDay"></span> <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
       <div class="punch">
         <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
         <div class="punch-fields">
@@ -190,12 +194,13 @@
         </div>
         <div class="slots" id="cardSlots"></div>
       </div>
+      </div>
     </div>
   </div>
 
 </main>
 
-<script src="activities.js?v=1795028816"></script>
+<script src="activities.js?v=1795028972"></script>
 <script>
   const $ = id => document.getElementById(id);
   const ORDER = ['phone', 'code', 'name', 'already', 'either', 'nos', 'when', 'pick', 'done'];
@@ -348,6 +353,7 @@
     $('doneTitle').textContent = `You're going ${a.short}, ${state.name}.`;
     $('doneWhen').textContent = `${a.when.replace(',', ' at')}, ${a.where}. That's ${a.credits} of your 12 credits this month, and your $50 membership starts today.`;
     $('cardName').textContent = state.name;
+    $('noteDay').textContent = day;
     $('cardSlots').innerHTML = Array.from({ length: 12 }, (_, k) => k === 0
       ? `<div class="slot next"><div class="hole">1</div><div class="what">${a.short.replace(/^./, c => c.toUpperCase())}</div><div class="note hand">${day}</div></div>`
       : `<div class="slot"><div class="hole">${k + 1}</div></div>`).join('');

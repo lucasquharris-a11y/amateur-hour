@@ -7,9 +7,9 @@
 <title>Amateur Hour</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Reenie+Beanie&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="amateur.css?v=1795028816">
-<script src="fonts.js?v=1795028816"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css?v=1795028972">
+<script src="fonts.js?v=1795028972"></script>
 <script>/* handwritten hero headline, written on at load. home.html?hero=type shows the typeset version. */ if (new URLSearchParams(location.search).get('hero') !== 'type') document.documentElement.classList.add('hand-hero');</script>
 <style>
   .nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 6.5vw 0; }
@@ -65,7 +65,9 @@
 
   /* ---------- the range: a slow belt of what's on ---------- */
   .range { padding: 10px 0 96px; overflow: hidden; }
-  .range h2 { padding: 0 6.5vw; font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; }
+  .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; padding: 0 6.5vw; }
+  .sec-head .aside { margin: 0 3vw 6px 0; }
+  .range h2 { max-width: 13em; font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; }
   .belt { display: flex; gap: 18px; width: max-content; padding: 44px 0 20px; animation: belt 90s linear infinite; }
   .belt:hover { animation-play-state: paused; }
   @keyframes belt { to { transform: translateX(calc(-50% - 9px)); } }
@@ -85,6 +87,8 @@
 
   /* ---------- how a week goes ---------- */
   .week { background: var(--spruce); color: var(--paper); padding: 104px 6.5vw 112px; }
+  .week .sec-head { padding: 0; }
+  .week .aside { color: var(--paper); }
   .week h2 { max-width: 14em; font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; }
   .week-grid { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: center; }
 
@@ -96,7 +100,8 @@
 
   /* scene 1: the text */
   .thread { width: min(100%, 500px); display: flex; flex-direction: column; gap: 10px; }
-  .stamp { font-size: 14px; font-weight: 500; text-align: center; opacity: .75; }
+  .stamp { font-size: 17px; font-weight: 600; text-align: center; margin-bottom: 14px; }
+  .scene.on .stamp { animation: rise .4s .05s both; }
   .bubble { max-width: 420px; padding: 19px 24px; border-radius: 22px 22px 22px 6px; background: var(--paper); color: var(--ink); font-size: 22px; line-height: 1.35; font-weight: 500; }
   .bubble.me { align-self: flex-end; border-radius: 22px 22px 6px 22px; background: var(--marigold); color: var(--accent-ink); }
   .scene.on .bubble { animation: rise .45s .25s both; }
@@ -108,9 +113,11 @@
   .scene .pick-card { --w: 228px; cursor: default; padding: 18px 17px; border-radius: 16px; box-shadow: 6px 8px 0 rgba(0, 0, 0, .2); }
   .scene .pick-card .facts { font-size: 14px; }
   .scene.on .pick-card { animation: rise .45s .2s both; }
-  .scene.on .pick-card.green { animation: rise .45s .35s both, dim .4s 1.7s forwards; }
-  .scene.on .pick-card.gold { animation: rise .45s .2s both, choose .45s 1.7s cubic-bezier(.2, .9, .3, 1.3) forwards; }
-  .scene.on .or-badge { animation: pop .3s .7s both, gone .3s 1.7s forwards; }
+  .scene.on .pick-card.green { animation: rise .45s .35s both; }
+  .scene.pick.on .pick-card.green { animation: rise .45s .35s both, dim .4s 1.7s forwards; }
+  .scene.pick.on .pick-card.gold { animation: rise .45s .2s both, choose .45s 1.7s cubic-bezier(.2, .9, .3, 1.3) forwards; }
+  .scene.on .or-badge { animation: pop .3s .7s both; }
+  .scene.pick.on .or-badge { animation: pop .3s .7s both, gone .3s 1.7s forwards; }
   @keyframes dim { to { opacity: .28; } }
   @keyframes gone { to { opacity: 0; } }
   @keyframes choose { to { translate: 0 -10px; rotate: -1deg; scale: 1.05; } }
@@ -164,7 +171,8 @@
 
   /* ---------- the card ---------- */
   .card { padding: 120px 6.5vw 124px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: center; }
-  .card .punch { justify-self: center; rotate: -2deg; }
+  .card-left { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; }
+  .card .punch { rotate: -2deg; }
   .card h2 { font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; max-width: 12em; }
   .card p { margin-top: 22px; max-width: 28em; }
   .card p + p { margin-top: .85em; }
@@ -173,7 +181,11 @@
   .price h2 { font-weight: 400; font-size: clamp(36px, 3.8vw, 58px); line-height: 1.05; letter-spacing: -.018em; max-width: 11em; }
   .price .figure { font-family: var(--ui); font-variation-settings: "wdth" 75; font-weight: 800; font-size: clamp(64px, 7.4vw, 112px); line-height: .9; letter-spacing: -.02em; color: var(--spruce); }
   .price p { max-width: 27em; }
-  .price .figure + p { margin-top: 22px; }
+  .price .figure span { position: relative; display: inline-block; }
+  .price .figure .doodle { position: absolute; left: -1%; bottom: -.2em; width: 102%; height: .2em; overflow: visible; color: var(--ink); }
+  .price .figure .doodle path { stroke-width: 3; vector-effect: non-scaling-stroke; }
+  .price .aside { display: flex; margin: 30px 0 4px 6px; rotate: -2deg; }
+  .price .aside + p { margin-top: 22px; }
   .price p + p { margin-top: .85em; }
   .price .btn { margin-top: 30px; }
   footer { padding: 40px 6.5vw 44px; font-style: italic; font-size: 18px; }
@@ -207,7 +219,7 @@
       </h1>
       <div class="letter">
         <p>Work asks less of your head every month, and most evenings go to a screen. A normal week doesn't hand you many chances to learn something from scratch anymore.</p>
-        <p>So every Sunday we text you two small classes around San Francisco for things you've probably never done. You pick one and show up. It's $50 a month.</p>
+        <p>So every Sunday you get two small classes around San Francisco for things you've probably never done. You pick one and show up. It's $50 a month.</p>
         <a class="btn" href="join.html">Join in San Francisco</a>
       </div>
     </div>
@@ -225,22 +237,29 @@
   </section>
 
   <section class="range">
-    <h2>Do something this week that AI can't do for you.</h2>
+    <div class="sec-head">
+      <h2>Do something this week that AI can't do for you.</h2>
+      <p class="aside">no screens involved <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+    </div>
     <div class="belt" id="belt"></div>
   </section>
 
   <section class="week" id="week">
-    <h2>How a week goes</h2>
+    <div class="sec-head">
+      <h2>How a week goes</h2>
+      <p class="aside">ten seconds of deciding <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+    </div>
     <div class="week-grid">
       <div class="stage" aria-hidden="true">
         <div class="scene on">
-          <div class="thread">
-            <p class="stamp">Sunday, 6:02pm</p>
-            <p class="bubble">Two for this week.</p>
-            <p class="bubble b2">Blow a glass cup on Thursday, or catch crab off the rocks on Saturday. Which one?</p>
+          <p class="stamp">Sunday, 6pm. Your two for the week.</p>
+          <div class="pair">
+            <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p></div></div>
+            <div class="pick-card green"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p></div></div>
+            <span class="or-badge">or</span>
           </div>
         </div>
-        <div class="scene">
+        <div class="scene pick">
           <div class="pair">
             <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p></div><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5 L10 17.5 L19 7"/></svg></span></div>
             <div class="pick-card green"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p></div></div>
@@ -271,8 +290,8 @@
       </div>
 
       <div class="steps" id="steps" style="--hold: 5200ms">
-        <button class="step on" type="button"><h3>Sunday, we text you two classes</h3><p>We choose them from what you've told us you haven't tried.</p><span class="bar"></span></button>
-        <button class="step" type="button"><h3>You pick one</h3><p>Reply to the text. There's no catalogue to scroll and there are no reviews to read.</p><span class="bar"></span></button>
+        <button class="step on" type="button"><h3>Sunday, two new classes appear</h3><p>We choose them from what you've told us you haven't tried.</p><span class="bar"></span></button>
+        <button class="step" type="button"><h3>You pick one</h3><p>Tap the one you want. There's no catalogue to scroll and there are no reviews to read.</p><span class="bar"></span></button>
         <button class="step" type="button"><h3>You show up</h3><p>Six to twelve people, and everything you need is there. Bring a friend on a day pass.</p><span class="bar"></span></button>
         <button class="step" type="button"><h3>You punch your card</h3><p>Loved it or never again, the week counts either way.</p><span class="bar"></span></button>
       </div>
@@ -280,6 +299,7 @@
   </section>
 
   <section class="card">
+    <div class="card-left">
     <div class="punch" aria-label="A member's punch card after four weeks">
       <div class="punch-head"><span class="wordmark">Amateur H<i class="chad"></i>ur</span><span>San Francisco</span></div>
       <div class="punch-fields">
@@ -301,6 +321,8 @@
         <div class="slot"><div class="hole">12</div></div>
       </div>
     </div>
+    <p class="aside up">yours starts empty <svg viewBox="0 0 46 50" aria-hidden="true"><path d="M4 4 C 24 6, 36 20, 32 44"/><path d="M22 35 L32 45 L40 32"/></svg></p>
+    </div>
     <div>
       <h2>Counteract your brainrot.</h2>
       <p>One evening a week, go be a beginner at something with your hands, in a room with other people. You won't like everything we send you to. Some weeks turn into a hobby and some turn into a story you tell at dinner.</p>
@@ -311,7 +333,8 @@
   <section class="price">
     <h2>Trying new things in San Francisco shouldn't break the bank.</h2>
     <div>
-      <p class="figure">$50 a month</p>
+      <p class="figure"><span>$50 a month<svg class="doodle" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4 9 C 90 3, 210 15, 396 7"/><path d="M30 19 C 130 13, 250 22, 372 16"/></svg></span></p>
+      <p class="aside">less than one dinner out</p>
       <p>That's 12 credits. Most classes are 2 to 4, so it covers about one a week. The same glassblowing class is around $200 if you book it yourself.</p>
       <p>Unused credits roll over, and you can pause any month.</p>
       <a class="btn" href="join.html">Join in San Francisco</a>
@@ -321,7 +344,7 @@
 
 <footer>Amateur Hour, San Francisco. Fills the long winter evenings.</footer>
 
-<script src="activities.js?v=1795028816"></script>
+<script src="activities.js?v=1795028972"></script>
 <script>
   // The belt: every activity once, then repeated so the loop is seamless.
   const tones = ['gold', 'line', 'green', 'manila'];
