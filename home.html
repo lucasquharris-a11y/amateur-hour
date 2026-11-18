@@ -126,6 +126,25 @@
   .scene.on .tick { animation: pop .3s 2.1s cubic-bezier(.2, .9, .3, 1.4) both; }
   .scene .pick-card.gold { position: relative; }
 
+  /* scene 1: a calendar leaf. scene 2: a note with one box ticked. (The two cards live in the hero only.) */
+  .leaf { width: min(100%, 300px); background: var(--paper); color: var(--ink); border-radius: 14px; overflow: hidden; rotate: -2deg; box-shadow: 7px 9px 0 rgba(0, 0, 0, .2); text-align: center; padding-bottom: 26px; }
+  .leaf-day { background: var(--marigold); color: var(--accent-ink); font-family: var(--ui); font-weight: 800; font-size: 24px; padding: 12px 0 13px; }
+  .leaf-time { font-family: var(--display); font-size: 96px; line-height: 1; letter-spacing: -.03em; padding: 22px 0 6px; }
+  .leaf-note { font-size: calc(34px * var(--hk, 1)); line-height: 1; padding: 0 18px; }
+  .scene.on .leaf { animation: rise .5s .2s both; }
+  .scene.on .leaf-note { animation: write .7s .9s ease-out both; }
+  .pad { width: min(100%, 440px); background: var(--paper); color: var(--ink); border-radius: 6px; padding: 30px 34px 34px; rotate: 1.2deg; box-shadow: 7px 9px 0 rgba(0, 0, 0, .2);
+    background-image: repeating-linear-gradient(transparent 0 51px, rgba(35, 64, 181, .16) 51px 53px); background-position: 0 26px; }
+  .pad-q { font-size: calc(34px * var(--hk, 1)); line-height: 53px; }
+  .pad-row { display: flex; align-items: center; gap: 14px; height: 53px; font-size: calc(40px * var(--hk, 1)); line-height: 1; white-space: nowrap; }
+  .tb { flex: none; width: 40px; height: 37px; overflow: visible; }
+  .tb path { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .tb .ck { stroke-width: 3.6; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .scene.on .pad { animation: rise .5s .2s both; }
+  .scene.on .pad-row.yes .ck { animation: tickit .4s 1.5s ease-out forwards; }
+  .scene.on .pad-row.no { animation: dim .4s 1.9s forwards; }
+  @keyframes tickit { to { stroke-dashoffset: 0; } }
+
   /* scene 3: show up */
   .slip { width: min(100%, 480px); background: var(--paper); color: var(--ink); border-radius: 16px; padding: 24px 26px 22px; box-shadow: 7px 9px 0 rgba(0, 0, 0, .2); rotate: -1.2deg; }
   .slip h4 { font-variation-settings: "wdth" 75; font-weight: 800; font-size: 40px; line-height: .95; }
@@ -231,7 +250,10 @@
     .week { padding: 72px 20px 76px; }
     .week-grid { margin-top: 28px; gap: 20px; }
     .stage { height: 330px; }
-    .scene .pick-card { --w: 39vw; padding: 15px 14px; }
+    .pad { padding: 22px 20px 26px; }
+    .pad-row { font-size: calc(31px * var(--hk, 1)); gap: 10px; }
+    .pad-q { font-size: calc(28px * var(--hk, 1)); }
+    .leaf-time { font-size: 80px; }
     .scene .punch { --hole: 44px; padding: 18px 18px 22px; }
     .slip { padding: 20px 20px 18px; }
     .slip h4 { font-size: 32px; }
@@ -307,18 +329,17 @@
     <div class="week-grid">
       <div class="stage" aria-hidden="true">
         <div class="scene on">
-          <p class="stamp">Sunday, 6pm. Your two for the week.</p>
-          <div class="pair">
-            <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p></div></div>
-            <div class="pick-card green"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p></div></div>
-            <span class="or-badge">or</span>
+          <div class="leaf">
+            <p class="leaf-day">Sunday</p>
+            <p class="leaf-time">6pm</p>
+            <p class="leaf-note hand">your two for the week are in</p>
           </div>
         </div>
         <div class="scene pick">
-          <div class="pair">
-            <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p></div><span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5 L10 17.5 L19 7"/></svg></span></div>
-            <div class="pick-card green"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p></div></div>
-            <span class="or-badge">or</span>
+          <div class="pad">
+            <p class="pad-q hand">this week I'm going to</p>
+            <div class="pad-row yes"><svg class="tb" viewBox="0 0 48 44" aria-hidden="true"><path class="sq" d="M6 9 L36 7 L38 38 L7 40 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg><span class="hand">blow a glass cup</span></div>
+            <div class="pad-row no"><svg class="tb" viewBox="0 0 48 44" aria-hidden="true"><path class="sq" d="M6 9 L36 7 L38 38 L7 40 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg><span class="hand">catch crab off the rocks</span></div>
           </div>
         </div>
         <div class="scene">

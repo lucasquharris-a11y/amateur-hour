@@ -22,7 +22,7 @@ def page(src, dst):
 
 page("home.html", "index.html")
 page("join.html", "join.html")
-for name in ("hands.html", "colors.html", "fonts.html", "compare.html"):
+for name in ("hands.html", "colors.html", "fonts.html", "compare.html", "choice.html"):
     s = (root / name).read_text().replace("home.html?", "index.html?").replace('"home.html"', '"index.html"')
     (docs / name).write_text(s.replace(meta, meta + '\n<meta name="robots" content="noindex">', 1))
 shutil.copy(root / "logo.html", docs / "logo.html")

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Amateur Hour · Ways to show the choice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amateur.css">
+<script src="fonts.js"></script>
+<style>
+  main { padding: 44px 6.5vw 100px; }
+  h1 { font-weight: 400; font-size: 44px; line-height: 1.05; letter-spacing: -.02em; }
+  .intro { margin-top: 10px; max-width: 38em; }
+  .grid { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 5vw; }
+  .opt { padding: 44px 0 52px; border-top: 2px solid var(--ink); margin-top: 36px; }
+  .opt h2 { font-family: var(--ui); font-weight: 800; font-size: 20px; }
+  .opt > p { margin-top: 6px; max-width: 30em; font-size: 18px; }
+  .demo { margin-top: 34px; min-height: 380px; display: grid; place-items: center; }
+  .hand { font-family: var(--hand); }
+  .tb { flex: none; width: 44px; height: 40px; overflow: visible; }
+  .tb path, .ring path { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .tb .ck { stroke-width: 3.8; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .tb.on .ck { stroke-dashoffset: 0; }
+  .facts { font-family: var(--ui); font-weight: 500; font-size: 15px; line-height: 1.3; }
+
+  /* 1. the note */
+  .note { width: min(100%, 470px); background: #fbf9f2; border-radius: 6px; padding: 30px 36px 40px; rotate: -1.4deg; box-shadow: 8px 10px 0 rgba(24, 32, 27, .12);
+    background-image: repeating-linear-gradient(transparent 0 55px, rgba(35, 64, 181, .15) 55px 57px); background-position: 0 30px; }
+  .note .q { font-size: calc(36px * var(--hk, 1)); line-height: 57px; }
+  .note .row { display: grid; grid-template-columns: 56px 1fr; align-items: center; min-height: 114px; }
+  .note .row b { display: block; font-family: var(--hand); font-weight: 400; font-size: calc(41px * var(--hk, 1)); line-height: 57px; white-space: nowrap; }
+  .note .row .facts { line-height: 57px; }
+  .note .row.no { opacity: .45; }
+
+  /* 2. two tickets */
+  .tickets { width: min(100%, 470px); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ticket { position: relative; width: 100%; display: grid; grid-template-columns: 1fr 104px; border-radius: 12px; font-family: var(--ui); box-shadow: 7px 9px 0 rgba(24, 32, 27, .12); }
+  .ticket.a { background: var(--marigold); color: var(--accent-ink); rotate: -1.6deg; }
+  .ticket.b { background: var(--spruce); color: var(--paper); rotate: 1.3deg; opacity: .5; }
+  .ticket .main { padding: 20px 22px 20px 26px; }
+  .ticket small { display: block; font-weight: 700; font-size: 13px; letter-spacing: .04em; }
+  .ticket strong { display: block; font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1.02; letter-spacing: -.02em; margin: 8px 0 12px; }
+  .ticket .stub { border-left: 2.5px dashed currentColor; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 12px 6px; text-align: center; }
+  .ticket .stub b { font-family: var(--display); font-weight: 400; font-size: 40px; line-height: 1; }
+  .ticket::before, .ticket::after { content: ""; position: absolute; right: 93px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); }
+  .ticket::before { top: -11px; } .ticket::after { bottom: -11px; }
+  .tickets .or { font-size: calc(38px * var(--hk, 1)); line-height: 1; }
+  .tickets .mine { align-self: flex-start; margin: 0 0 4px 30px; font-size: calc(30px * var(--hk, 1)); line-height: 1; rotate: -3deg; }
+
+  /* 3. circle one */
+  .circle { width: min(100%, 500px); }
+  .circle .q { font-size: calc(34px * var(--hk, 1)); line-height: 1; margin-bottom: 26px; rotate: -2deg; }
+  .circle .c { position: relative; display: inline-block; font-family: var(--display); font-size: 50px; line-height: 1.08; letter-spacing: -.022em; padding: 4px 8px; }
+  .circle .ring { position: absolute; left: -7%; top: -22%; width: 114%; height: 144%; overflow: visible; }
+  .circle .ring path { stroke-width: 3; vector-effect: non-scaling-stroke; }
+  .circle .facts { margin: 8px 0 0 8px; }
+  .circle .or { font-family: var(--display); font-style: italic; font-size: 24px; margin: 20px 0 18px 8px; }
+  .circle .lose { opacity: .45; }
+
+  /* 4. now */
+  .opt .pair .pick-card { --w: 214px; cursor: default; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } main { padding: 32px 20px 64px; } .circle .c { font-size: 36px; } .note .row b { font-size: calc(34px * var(--hk, 1)); white-space: normal; line-height: 1.1; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ways to show the weekly choice</h1>
+  <p class="intro">Three alternatives to the two cards with an "or", each shown with one option picked. Same two classes in all of them.</p>
+  <div class="grid">
+
+    <div class="opt">
+      <h2>1. The note</h2>
+      <p>A page from a notepad with two tick boxes, like a note passed in class. It uses the handwriting and the tick you already have, and nobody needs telling what to do with a tick box.</p>
+      <div class="demo">
+        <div class="note">
+          <p class="q hand">this week I'm going to</p>
+          <div class="row"><svg class="tb on" viewBox="0 0 48 44" aria-hidden="true"><path class="sq" d="M6 9 L36 7 L38 38 L7 40 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg><div><b>blow a glass cup</b><span class="facts">Thursday, 6:30pm. Public Glass, Bayview</span></div></div>
+          <div class="row no"><svg class="tb" viewBox="0 0 48 44" aria-hidden="true"><path class="sq" d="M7 8 L37 9 L36 39 L6 38 Z"/><path class="ck" pathLength="1" d="M12 23 L21 34 L45 3"/></svg><div><b>catch crab off the rocks</b><span class="facts">Saturday, 9am. The coast, with Sea Forager</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opt">
+      <h2>2. Two tickets</h2>
+      <p>Two admit-one tickets with a tear-off stub. You keep one. It makes the class feel like a night out you've got a ticket for, and it sits naturally next to the punch card.</p>
+      <div class="demo">
+        <div class="tickets">
+          <p class="mine hand">mine</p>
+          <div class="ticket a"><div class="main"><small>Admit one</small><strong>Blow a glass cup</strong><span class="facts">Thursday, 6:30pm<br>Public Glass, Bayview</span></div><div class="stub"><small>Week</small><b>1</b></div></div>
+          <p class="or hand">or</p>
+          <div class="ticket b"><div class="main"><small>Admit one</small><strong>Catch crab off the rocks</strong><span class="facts">Saturday, 9am<br>The coast, with Sea Forager</span></div><div class="stub"><small>Week</small><b>1</b></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opt">
+      <h2>3. Circle one</h2>
+      <p>No boxes at all. Two lines of type and a pen circle around your pick, like answering a quiz. The quietest option, and the closest to the letter at the top of the page.</p>
+      <div class="demo">
+        <div class="circle">
+          <p class="q hand">circle one</p>
+          <div><span class="c">Blow a glass cup<svg class="ring" viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true"><path d="M 28 34 C 70 2, 330 -4, 382 30 C 408 58, 300 78, 192 76 C 84 74, -6 62, 22 26 C 30 14, 60 8, 96 8"/></svg></span><p class="facts">Thursday, 6:30pm. Public Glass, Bayview</p></div>
+          <p class="or">or</p>
+          <div class="lose"><span class="c">Catch crab off the rocks</span><p class="facts">Saturday, 9am. The coast, with Sea Forager</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opt">
+      <h2>4. Now: two cards and an "or"</h2>
+      <p>What's on the page today, for comparison.</p>
+      <div class="demo">
+        <div class="pair">
+          <div class="pick-card gold"><h3>Blow a glass cup</h3><div class="facts"><p>Thursday, 6:30pm</p><p>Public Glass, Bayview</p></div></div>
+          <div class="pick-card green" style="opacity:.45"><h3>Catch crab off the rocks</h3><div class="facts"><p>Saturday, 9am</p><p>The coast, with Sea Forager</p></div></div>
+          <span class="or-badge">or</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</body>
+</html>
